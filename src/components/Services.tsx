@@ -88,6 +88,10 @@ export default function Services() {
       <div className="services-sphere sphere-3"></div>
       <div className="services-sphere sphere-4"></div>
       <div className="services-sphere sphere-5"></div>
+      <div className="services-sphere sphere-6"></div>
+      <div className="services-sphere sphere-7"></div>
+      <div className="services-sphere sphere-8"></div>
+      <div className="services-sphere sphere-9"></div>
       
       <div className="container">
         <div className="services-header">

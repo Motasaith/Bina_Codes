@@ -238,6 +238,80 @@
   animation: sphereFloat 5s ease-in-out 1s infinite alternate;
 }
 
+/* ---- Sphere 6: Medium golden-amber, bottom-right ---- */
+.sphere-6 {
+  width: 90px;
+  height: 90px;
+  bottom: 8%;
+  right: 6%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 225, 180, 0.45) 0%,
+    rgba(210, 175, 130, 0.22) 50%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 230, 190, 0.25);
+  box-shadow:
+    inset -4px -4px 10px rgba(140, 100, 60, 0.05),
+    inset 4px 4px 10px rgba(255, 255, 255, 0.25),
+    0 10px 25px rgba(180, 140, 80, 0.05);
+  animation: sphereFloat 9s ease-in-out 1.5s infinite alternate;
+}
+
+/* ---- Sphere 7: Translucent white bubble, left-center near second row ---- */
+.sphere-7 {
+  width: 40px;
+  height: 40px;
+  top: 55%;
+  left: 15%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(230, 210, 190, 0.15) 60%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset -2px -2px 6px rgba(0, 0, 0, 0.03),
+    inset 2px 2px 6px rgba(255, 255, 255, 0.35);
+  animation: sphereFloat 7.5s ease-in-out 0.8s infinite alternate-reverse;
+}
+
+/* ---- Sphere 8: Sparkle amber bubble, top-center ---- */
+.sphere-8 {
+  width: 28px;
+  height: 28px;
+  top: 25%;
+  left: 45%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 240, 210, 0.55) 0%,
+    rgba(230, 190, 140, 0.18) 60%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 235, 200, 0.25);
+  animation: sphereFloat 5.5s ease-in-out 0.2s infinite alternate;
+}
+
+/* ---- Sphere 9: Translucent golden, middle-right near first row ---- */
+.sphere-9 {
+  width: 65px;
+  height: 65px;
+  top: 45%;
+  right: 18%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 230, 190, 0.45) 0%,
+    rgba(200, 160, 110, 0.15) 60%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 220, 170, 0.22);
+  box-shadow:
+    inset -3px -3px 8px rgba(140, 100, 60, 0.05),
+    inset 3px 3px 8px rgba(255, 255, 255, 0.28);
+  animation: sphereFloat 8.5s ease-in-out 2.5s infinite alternate-reverse;
+}
+
 @keyframes sphereFloat {
   0% { transform: translateY(0) scale(1); }
   100% { transform: translateY(-15px) scale(1.03); }
@@ -251,6 +325,8 @@
 
   .sphere-1 { width: 100px; height: 100px; }
   .sphere-2 { width: 120px; height: 120px; }
+  .sphere-6 { width: 60px; height: 60px; }
+  .sphere-9 { width: 50px; height: 50px; }
 }
 
 @media (max-width: 768px) {
@@ -271,6 +347,6 @@
     padding: 2rem 1.5rem;
   }
 
-  .sphere-1, .sphere-4 { display: none; }
+  .sphere-1, .sphere-4, .sphere-6, .sphere-7, .sphere-8, .sphere-9 { display: none; }
   .sphere-2 { width: 80px; height: 80px; right: -15px; }
 }
