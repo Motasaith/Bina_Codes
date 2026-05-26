@@ -107,7 +107,7 @@ function TerminalScreen() {
   const [logs, setLogs] = useState<string[]>([]);
   const [bootIndex, setBootIndex] = useState(0);
   const [showBanner, setShowBanner] = useState(false);
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalBodyRef = useRef<HTMLDivElement>(null);
 
   const bootSequence = [
     "BINA CODES OS v1.0.4 (x86_64-pc-linux-gnu)",
@@ -174,9 +174,11 @@ function TerminalScreen() {
     }
   }, [showBanner]);
 
-  // Auto scroll effect
+  // Auto scroll effect locally within the terminal body container (prevents window scrolling)
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (terminalBodyRef.current) {
+      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
+    }
   }, [logs, showBanner]);
 
   return (
@@ -192,7 +194,7 @@ function TerminalScreen() {
       </div>
       
       {/* Terminal Content Area */}
-      <div className="terminal-body">
+      <div className="terminal-body" ref={terminalBodyRef}>
         {logs.map((log, idx) => (
           <div key={idx} className="terminal-line">
             <span className="terminal-prompt">&gt;</span> {log}
@@ -210,7 +212,6 @@ function TerminalScreen() {
             </div>
           </div>
         )}
-        <div ref={terminalEndRef} />
       </div>
     </div>
   );
