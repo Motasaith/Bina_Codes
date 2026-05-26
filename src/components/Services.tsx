@@ -282,9 +282,9 @@ function Laptop(props: React.ComponentProps<'group'>) {
         {/* Interactive HTML Terminal Screen Overlay - adjusted scale/distance factor to fit display bezel */}
         <Html
           transform
-          position={[0, 0.012, 0.082]}
+          position={[0, -0.006, 0.082]}
           rotation={[Math.PI / 2, 0, 0]}
-          distanceFactor={0.29}
+          scale={0.00031}
         >
           <TerminalScreen />
         </Html>
