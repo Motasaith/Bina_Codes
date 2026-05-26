@@ -139,6 +139,7 @@
   width: 100%;
   height: 550px;
   cursor: grab;
+  overflow: hidden;
 }
 
 .services-canvas-wrapper:active {

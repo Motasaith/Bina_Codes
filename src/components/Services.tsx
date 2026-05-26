@@ -252,7 +252,8 @@ function InteractiveTerminal() {
       <Html
         transform
         position={[0, 0, 0.05]}
-        scale={0.0036}
+        distanceFactor={1.45}
+        center
         occlude={false}
       >
         <TerminalScreen />

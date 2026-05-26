@@ -241,6 +241,7 @@
   width: 100%;
   height: 550px;
   position: relative;
+  overflow: hidden;
 }
 
 /* 3D Scene Loader styling */
