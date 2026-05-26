@@ -10,36 +10,24 @@
   overflow: visible;
 }
 
-.canvas-container {
-  width: 100%;
-  height: 550px;
-  border-radius: var(--radius-xl);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 
-    0 15px 40px rgba(142, 126, 105, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+/* ---- SERVICES TWO-COLUMN GRID ---- */
+.services-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 5rem;
+  align-items: center;
   position: relative;
-  overflow: hidden;
   z-index: 10;
 }
 
-/* ---- FLOATING CONTENT OVERLAY ---- */
-.services-overlay-content {
-  position: absolute;
-  top: 3.5rem;
-  left: 3.5rem;
-  z-index: 20;
-  max-width: 440px;
-  pointer-events: none; /* Allows click-dragging on the canvas underneath */
+.services-content-col {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 1.25rem;
   text-align: left;
 }
+
 
 /* Chip tag matching hero */
 .services-chip {
@@ -147,11 +135,9 @@
 
 /* ---- 3D CANVAS WRAPPER (holds Canvas relative to card container) ---- */
 .services-canvas-wrapper {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: 550px;
   cursor: grab;
 }
 
@@ -537,18 +523,12 @@
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 992px) {
-  .canvas-container {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    padding: 3rem 2rem;
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
 
-  .services-overlay-content {
-    position: static;
-    max-width: 100%;
-    margin-bottom: 2.5rem;
-    pointer-events: auto;
+  .services-content-col {
     align-items: center;
     text-align: center;
   }

@@ -271,18 +271,6 @@ function CanvasLoader() {
 }
 
 export default function Services() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Screen size listener to adjust the terminal's positioning dynamically (centered on mobile, offset right on desktop)
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 992);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   return (
     <section id="services" className="services-section">
       {/* Decorative floating spheres */}
@@ -297,10 +285,10 @@ export default function Services() {
       <div className="services-sphere sphere-9"></div>
       
       <div className="container">
-        <div className="canvas-container">
+        <div className="services-grid">
           
-          {/* Floating Software House Copy */}
-          <div className="services-overlay-content">
+          {/* Left panel: Software House Copy */}
+          <div className="services-content-col">
             <div className="services-chip">
               <span>Bina DevOps & API Hub</span>
               <span className="services-chip-arrow">→</span>
@@ -345,44 +333,47 @@ export default function Services() {
             </div>
           </div>
 
-          {/* Full-width 3D Canvas rendering underneath */}
-          <div className="services-canvas-wrapper">
-            <CanvasErrorBoundary>
-              <Suspense fallback={<CanvasLoader />}>
-                <Canvas
-                  shadows
-                  camera={{ position: [0, 0, 4.2], fov: 42 }}
-                  gl={{ antialias: true, alpha: true }}
-                >
-                  <ambientLight intensity={1.8} />
-                  <Environment preset="sunset" />
-                  
-                  <directionalLight 
-                    position={[5, 10, 5]} 
-                    intensity={2.5} 
-                    castShadow 
-                    shadow-mapSize-width={1024} 
-                    shadow-mapSize-height={1024} 
-                  />
-                  <spotLight 
-                    position={[-5, 8, 5]} 
-                    angle={0.25} 
-                    penumbra={1} 
-                    intensity={2.0} 
-                    castShadow 
-                  />
-                  <pointLight position={[0, -2, 5]} intensity={1.2} />
-                  
-                  {/* Terminal group: shifted to the right on desktop to prevent overlap with text */}
-                  <group position={[isMobile ? 0 : 0.9, 0, 0]}>
-                    <InteractiveTerminal />
-                  </group>
-                  
-                  <OrbitControls enableZoom={false} enablePan={false} />
-                </Canvas>
-              </Suspense>
-            </CanvasErrorBoundary>
+          {/* Right panel: 3D Canvas Column */}
+          <div className="services-canvas-col">
+            <div className="services-canvas-wrapper">
+              <CanvasErrorBoundary>
+                <Suspense fallback={<CanvasLoader />}>
+                  <Canvas
+                    shadows
+                    camera={{ position: [0, 0, 4.2], fov: 42 }}
+                    gl={{ antialias: true, alpha: true }}
+                  >
+                    <ambientLight intensity={1.8} />
+                    <Environment preset="sunset" />
+                    
+                    <directionalLight 
+                      position={[5, 10, 5]} 
+                      intensity={2.5} 
+                      castShadow 
+                      shadow-mapSize-width={1024} 
+                      shadow-mapSize-height={1024} 
+                    />
+                    <spotLight 
+                      position={[-5, 8, 5]} 
+                      angle={0.25} 
+                      penumbra={1} 
+                      intensity={2.0} 
+                      castShadow 
+                    />
+                    <pointLight position={[0, -2, 5]} intensity={1.2} />
+                    
+                    {/* Centered terminal group inside the canvas column */}
+                    <group position={[0, 0, 0]}>
+                      <InteractiveTerminal />
+                    </group>
+                    
+                    <OrbitControls enableZoom={false} enablePan={false} />
+                  </Canvas>
+                </Suspense>
+              </CanvasErrorBoundary>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
