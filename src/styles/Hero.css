@@ -7,7 +7,8 @@
 
 .hero-section {
   padding: 0;
-  min-height: 100vh;
+  min-height: 80vh;
+  height: 80vh;
   display: flex;
   align-items: stretch;
   position: relative;
@@ -17,7 +18,8 @@
 /* The main rounded card that holds everything */
 .hero-card {
   width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
+  height: 80vh;
   border-radius: 0 0 28px 28px;
   position: relative;
   overflow: hidden;
@@ -67,11 +69,12 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 7.5rem 4rem 5rem 4rem;
+  padding: 7.5rem 4rem 3rem 4rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  min-height: 100vh;
+  min-height: 80vh;
+  height: 80vh;
 }
 
 /* ---- RIGHT COLUMN: TEXT ---- */
@@ -189,8 +192,8 @@
 .hero-cursor-bubble {
   position: absolute;
   z-index: 8;
-  width: 28px;
-  height: 28px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%);
@@ -201,16 +204,16 @@
   /* Glass sphere look */
   background: radial-gradient(
     circle at 35% 30%,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.12) 40%,
-    rgba(200, 180, 160, 0.05) 70%,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    rgba(200, 180, 160, 0.06) 70%,
     transparent 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   box-shadow:
-    inset -2px -2px 5px rgba(0, 0, 0, 0.06),
-    inset 2px 2px 5px rgba(255, 255, 255, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.08);
+    inset -3px -3px 8px rgba(0, 0, 0, 0.07),
+    inset 3px 3px 8px rgba(255, 255, 255, 0.22),
+    0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* ---- FLOATING BUBBLES / GLASS SPHERES ---- */
@@ -326,12 +329,13 @@
 @media (max-width: 768px) {
   .hero-card {
     border-radius: 0 0 20px 20px;
-    min-height: 100vh;
+    min-height: 80vh;
+    height: 80vh;
   }
 
   .hero-content {
     justify-content: center;
-    padding: 6rem 1.5rem 5rem 1.5rem;
+    padding: 6rem 1.5rem 2rem 1.5rem;
   }
 
   .hero-text-column {

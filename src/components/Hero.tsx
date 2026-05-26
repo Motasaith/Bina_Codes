@@ -3,7 +3,6 @@ import Navbar from './Navbar';
 import '../styles/Hero.css';
 
 export default function Hero() {
-  const [activeSlide, setActiveSlide] = useState(0);
   const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
   const [isInHero, setIsInHero] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -89,32 +88,6 @@ export default function Hero() {
 
             <a href="#services" className="btn-hero-cta">Learn More</a>
           </div>
-        </div>
-
-        {/* ---- NAV ARROWS (right edge) ---- */}
-        <div className="hero-nav-arrows">
-          <button className="hero-nav-arrow" aria-label="Previous slide">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="18 15 12 9 6 15" />
-            </svg>
-          </button>
-          <button className="hero-nav-arrow" aria-label="Next slide">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-        </div>
-
-        {/* ---- PAGINATION DOTS ---- */}
-        <div className="hero-pagination">
-          {[0, 1, 2, 3, 4].map((index) => (
-            <button
-              key={index}
-              className={`pagination-dot ${activeSlide === index ? 'active' : ''}`}
-              onClick={() => setActiveSlide(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
         </div>
 
       </div>
