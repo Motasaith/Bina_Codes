@@ -142,10 +142,11 @@
 
 /* Description text */
 .hero-desc {
-  font-family: var(--font-primary);
-  font-size: 1rem;
+  font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive;
+  font-size: 1.1rem;
+  font-weight: 500;
   line-height: 1.65;
-  color: rgba(230, 215, 195, 0.85);
+  color: rgba(235, 220, 205, 0.9);
   max-width: 420px;
 }
 
