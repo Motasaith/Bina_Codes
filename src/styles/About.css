@@ -1,0 +1,207 @@
+.about-section {
+  padding: 8rem 0;
+  background: linear-gradient(180deg, var(--color-bg-base) 0%, var(--color-bg-dune-light) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 5rem;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* Left panel: Floating Stats Display */
+.about-stats-panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.about-stat-card {
+  padding: 2.5rem 1.75rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(78, 47, 29, 0.1);
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  box-shadow: 0 10px 30px rgba(142, 126, 105, 0.05);
+  transition: var(--transition-smooth);
+}
+
+.about-stat-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(78, 47, 29, 0.2);
+  box-shadow: 0 20px 40px rgba(78, 47, 29, 0.08);
+}
+
+.about-stat-card:nth-child(even) {
+  transform: translateY(2rem);
+}
+
+.about-stat-card:nth-child(even):hover {
+  transform: translateY(1.75rem);
+}
+
+.stat-number {
+  font-family: var(--font-accent);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-brand-primary);
+  line-height: 1;
+  background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-muted-dark);
+}
+
+/* Right panel: Copy content */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.about-tagline {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.about-title {
+  font-size: 2.75rem;
+  color: var(--color-brand-dark);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.about-text {
+  font-family: var(--font-primary);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--color-text-muted-dark);
+}
+
+.about-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.about-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.feature-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(249, 154, 60, 0.15);
+  border: 1px solid rgba(249, 154, 60, 0.3);
+  color: var(--color-accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.feature-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.feature-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-brand-primary);
+}
+
+.feature-desc {
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-text-muted-dark);
+}
+
+/* Background elements */
+.about-bg-blur {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(213, 195, 176, 0.4) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.about-blur-1 {
+  top: 10%;
+  left: -100px;
+}
+
+.about-blur-2 {
+  bottom: 10%;
+  right: -100px;
+}
+
+/* Responsiveness */
+@media (max-width: 992px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+  
+  .about-stats-panel {
+    order: 2;
+    margin-top: 2rem;
+  }
+  
+  .about-content {
+    order: 1;
+  }
+}
+
+@media (max-width: 576px) {
+  .about-stats-panel {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .about-stat-card:nth-child(even) {
+    transform: none;
+  }
+  
+  .about-stat-card:nth-child(even):hover {
+    transform: translateY(-5px);
+  }
+  
+  .about-title {
+    font-size: 2.25rem;
+  }
+}

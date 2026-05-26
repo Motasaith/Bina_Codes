@@ -1,0 +1,386 @@
+/* ===================================================
+   HERO SECTION
+   The video fills the entire hero card as a background.
+   All content (text, bubbles) floats on top.
+   Custom cursor + trailing bubble on hover.
+   =================================================== */
+
+.hero-section {
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  background-color: var(--color-bg-base);
+}
+
+/* The main rounded card that holds everything */
+.hero-card {
+  width: 100%;
+  min-height: 100vh;
+  border-radius: 0 0 28px 28px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+/* ---- CUSTOM CURSOR ---- */
+.hero-card--custom-cursor,
+.hero-card--custom-cursor * {
+  cursor: url('/cursor.svg') 5 2, auto;
+}
+
+/* ---- VIDEO AS FULL BACKGROUND ---- */
+.hero-video-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-video-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Dark gradient overlay so text is readable on top of video */
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(30, 15, 5, 0.08) 0%, rgba(30, 15, 5, 0.35) 55%, rgba(30, 15, 5, 0.5) 100%),
+    radial-gradient(ellipse at 70% 50%, rgba(30, 15, 5, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ---- CONTENT GRID (sits on top of video) ---- */
+.hero-content {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 7.5rem 4rem 5rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 100vh;
+}
+
+/* ---- RIGHT COLUMN: TEXT ---- */
+.hero-text-column {
+  color: var(--color-text-light);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  max-width: 480px;
+  width: 100%;
+}
+
+/* Chip / Tag */
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.5rem;
+  background: rgba(120, 80, 50, 0.45);
+  border: 1px solid rgba(200, 170, 140, 0.3);
+  border-radius: var(--radius-full);
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: var(--transition-quick);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.hero-chip:hover {
+  background: rgba(120, 80, 50, 0.6);
+  transform: translateY(-1px);
+}
+
+.hero-chip-arrow {
+  color: var(--color-accent-gold);
+  font-weight: 700;
+}
+
+/* Main Title */
+.hero-title {
+  font-family: var(--font-accent);
+  font-size: 4.25rem;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  color: #ffffff;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Description text */
+.hero-desc {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: rgba(230, 215, 195, 0.85);
+  max-width: 420px;
+}
+
+/* CTA Button */
+.btn-hero-cta {
+  display: inline-block;
+  background: var(--color-brand-primary);
+  color: var(--color-text-light);
+  padding: 0.9rem 2.25rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: var(--transition-smooth);
+  margin-top: 0.5rem;
+}
+
+.btn-hero-cta:hover {
+  background: var(--color-accent-gold);
+  color: var(--color-brand-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(249, 154, 60, 0.4);
+}
+
+/* ---- PAGINATION DOTS ---- */
+.hero-pagination {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.6rem;
+  z-index: 10;
+}
+
+.pagination-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: var(--transition-quick);
+  border: none;
+}
+
+.pagination-dot.active {
+  width: 28px;
+  border-radius: var(--radius-full);
+  background: #ffffff;
+}
+
+/* ---- TRAILING CURSOR BUBBLE ---- */
+.hero-cursor-bubble {
+  position: absolute;
+  z-index: 8;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  /* Smooth trailing effect — lags slightly behind cursor */
+  transition:
+    left 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    top 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Glass sphere look */
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.12) 40%,
+    rgba(200, 180, 160, 0.05) 70%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.06),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ---- FLOATING BUBBLES / GLASS SPHERES ---- */
+.hero-bubble {
+  position: absolute;
+  z-index: 6;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.08) 30%,
+    rgba(200, 180, 160, 0.04) 60%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset -4px -4px 10px rgba(0, 0, 0, 0.08),
+    inset 4px 4px 10px rgba(255, 255, 255, 0.12),
+    0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.hero-bubble--1 {
+  width: 90px;
+  height: 90px;
+  top: 18%;
+  left: 5%;
+  animation: heroFloat 7s ease-in-out infinite alternate;
+}
+
+.hero-bubble--2 {
+  width: 55px;
+  height: 55px;
+  bottom: 12%;
+  left: 8%;
+  animation: heroFloat 9s ease-in-out infinite alternate-reverse;
+}
+
+.hero-bubble--3 {
+  width: 30px;
+  height: 30px;
+  bottom: 18%;
+  left: 16%;
+  animation: heroFloat 5s ease-in-out 1s infinite alternate;
+}
+
+.hero-bubble--4 {
+  width: 28px;
+  height: 28px;
+  top: 42%;
+  right: 8%;
+  animation: heroFloat 6s ease-in-out 0.5s infinite alternate-reverse;
+}
+
+.hero-bubble--5 {
+  width: 20px;
+  height: 20px;
+  bottom: 25%;
+  right: 22%;
+  animation: heroFloat 8s ease-in-out 2s infinite alternate;
+}
+
+@keyframes heroFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-18px); }
+}
+
+/* ---- NAVIGATION ARROWS (right side) ---- */
+.hero-nav-arrows {
+  position: absolute;
+  right: 2rem;
+  bottom: 50%;
+  transform: translateY(50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.hero-nav-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: var(--transition-quick);
+}
+
+.hero-nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* ===================================================
+   RESPONSIVE BREAKPOINTS
+   =================================================== */
+
+@media (max-width: 1100px) {
+  .hero-content {
+    padding: 7rem 2.5rem 5rem 2.5rem;
+  }
+
+  .hero-title {
+    font-size: 3.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-card {
+    border-radius: 0 0 20px 20px;
+    min-height: 100vh;
+  }
+
+  .hero-content {
+    justify-content: center;
+    padding: 6rem 1.5rem 5rem 1.5rem;
+  }
+
+  .hero-text-column {
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .hero-desc {
+    max-width: 100%;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-bubble--1 {
+    width: 50px;
+    height: 50px;
+    top: 10%;
+  }
+
+  .hero-bubble--2,
+  .hero-bubble--3 {
+    display: none;
+  }
+
+  .hero-nav-arrows {
+    display: none;
+  }
+
+  /* Hide trailing bubble on touch devices */
+  .hero-cursor-bubble {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-chip {
+    font-size: 0.78rem;
+    padding: 0.45rem 1.1rem;
+  }
+
+  .btn-hero-cta {
+    padding: 0.8rem 1.75rem;
+    font-size: 0.9rem;
+  }
+}

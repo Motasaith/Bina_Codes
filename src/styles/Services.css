@@ -1,0 +1,276 @@
+/* ===================================================
+   SERVICES / "BINA SERVERS" SECTION
+   Light beige area directly below the hero card.
+   Prominent floating glass spheres around the heading.
+   =================================================== */
+
+.services-section {
+  background-color: var(--color-bg-base);
+  padding: 5rem 0 6rem 0;
+  position: relative;
+  overflow: visible;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 4.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.services-title {
+  font-size: 3.25rem;
+  color: var(--color-brand-dark);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 1rem;
+}
+
+.services-subtitle {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-muted-dark);
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+/* ---- SERVICE CARDS GRID ---- */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.service-card {
+  padding: 2.75rem 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(236, 230, 220, 0.3) 100%);
+  box-shadow: 0 10px 30px rgba(142, 126, 105, 0.04);
+  transition: var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  cursor: pointer;
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(236, 230, 220, 0.5) 100%);
+  border-color: var(--color-accent-gold);
+  box-shadow:
+    0 20px 45px rgba(78, 47, 29, 0.08),
+    0 0 20px rgba(249, 154, 60, 0.15);
+}
+
+.service-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--color-brand-light);
+  border: 1px solid rgba(78, 47, 29, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-brand-primary);
+  transition: var(--transition-smooth);
+}
+
+.service-card:hover .service-icon-box {
+  background: var(--color-brand-primary);
+  color: var(--color-text-light);
+  transform: scale(1.05) rotate(5deg);
+}
+
+.service-card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-brand-dark);
+}
+
+.service-card-desc {
+  font-family: var(--font-primary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--color-text-muted-dark);
+}
+
+.service-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted-dark);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+.status-dot.active {
+  animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* ===================================================
+   FLOATING GLASS SPHERES
+   Large golden/amber glass bubbles around the heading
+   area, matching the screenshot transition zone.
+   =================================================== */
+
+.services-sphere {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ---- Sphere 1: Large golden sphere, left side ---- */
+.sphere-1 {
+  width: 160px;
+  height: 160px;
+  top: -40px;
+  left: -20px;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 235, 200, 0.7) 0%,
+    rgba(220, 180, 130, 0.4) 40%,
+    rgba(180, 140, 90, 0.15) 70%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 230, 190, 0.35);
+  box-shadow:
+    inset -6px -6px 15px rgba(140, 100, 60, 0.1),
+    inset 6px 6px 15px rgba(255, 255, 255, 0.4),
+    0 15px 40px rgba(180, 140, 80, 0.1);
+  animation: sphereFloat 8s ease-in-out infinite alternate;
+}
+
+/* ---- Sphere 2: Large amber sphere, right side ---- */
+.sphere-2 {
+  width: 180px;
+  height: 180px;
+  top: 20%;
+  right: -40px;
+  background: radial-gradient(
+    circle at 40% 35%,
+    rgba(255, 220, 170, 0.6) 0%,
+    rgba(200, 160, 110, 0.35) 40%,
+    rgba(170, 130, 80, 0.1) 70%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 220, 170, 0.3);
+  box-shadow:
+    inset -5px -5px 12px rgba(140, 100, 60, 0.08),
+    inset 5px 5px 12px rgba(255, 255, 255, 0.35),
+    0 12px 35px rgba(180, 140, 80, 0.08);
+  animation: sphereFloat 10s ease-in-out 1s infinite alternate-reverse;
+}
+
+/* ---- Sphere 3: Small translucent sphere, top-left near heading ---- */
+.sphere-3 {
+  width: 50px;
+  height: 50px;
+  top: 8%;
+  left: 12%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(220, 200, 180, 0.15) 60%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset -2px -2px 6px rgba(0, 0, 0, 0.04),
+    inset 2px 2px 6px rgba(255, 255, 255, 0.3);
+  animation: sphereFloat 6s ease-in-out 0.5s infinite alternate;
+}
+
+/* ---- Sphere 4: Medium golden, bottom-left ---- */
+.sphere-4 {
+  width: 70px;
+  height: 70px;
+  bottom: 15%;
+  left: 5%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 230, 190, 0.5) 0%,
+    rgba(200, 165, 120, 0.2) 60%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 225, 180, 0.25);
+  box-shadow:
+    inset -3px -3px 8px rgba(140, 100, 60, 0.06),
+    inset 3px 3px 8px rgba(255, 255, 255, 0.3),
+    0 8px 20px rgba(180, 140, 80, 0.06);
+  animation: sphereFloat 7s ease-in-out 2s infinite alternate-reverse;
+}
+
+/* ---- Sphere 5: Tiny sparkle, right side ---- */
+.sphere-5 {
+  width: 22px;
+  height: 22px;
+  top: 35%;
+  right: 10%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 240, 0.6) 0%,
+    rgba(255, 220, 180, 0.2) 60%,
+    transparent 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  animation: sphereFloat 5s ease-in-out 1s infinite alternate;
+}
+
+@keyframes sphereFloat {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-15px) scale(1.03); }
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 992px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sphere-1 { width: 100px; height: 100px; }
+  .sphere-2 { width: 120px; height: 120px; }
+}
+
+@media (max-width: 768px) {
+  .services-section {
+    padding: 4rem 0 5rem 0;
+  }
+
+  .services-title {
+    font-size: 2.25rem;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .sphere-1, .sphere-4 { display: none; }
+  .sphere-2 { width: 80px; height: 80px; right: -15px; }
+}
