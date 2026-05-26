@@ -1,6 +1,6 @@
 import React, { useState, Suspense, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import '../styles/Contact.css';
 
@@ -49,7 +49,7 @@ function GlassEnvelope() {
     groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetY, 0.08);
 
     // Hover scale effect
-    const targetScale = hovered ? 1.15 : 1.0;
+    const targetScale = hovered ? 1.12 : 1.0;
     groupRef.current.scale.setScalar(THREE.MathUtils.lerp(groupRef.current.scale.x, targetScale, 0.1));
   });
 
@@ -62,12 +62,12 @@ function GlassEnvelope() {
     >
       {/* 1. Main Transparent Glass Body */}
       <mesh castShadow receiveShadow>
-        <boxGeometry args={[2.5, 1.6, 0.1]} />
+        <boxGeometry args={[2.2, 1.4, 0.08]} />
         <meshPhysicalMaterial 
-          transmission={0.9} 
-          roughness={0.08} 
-          thickness={0.5} 
-          ior={1.5} 
+          transmission={0.95} 
+          roughness={0.05} 
+          thickness={0.6} 
+          ior={1.52} 
           color="#ffffff" 
           clearcoat={1.0} 
           clearcoatRoughness={0.05}
@@ -76,72 +76,72 @@ function GlassEnvelope() {
       </mesh>
 
       {/* 2. Inner Letter (Golden sand-colored card/paper sheet) */}
-      <mesh position={[0, 0.02, 0]}>
-        <boxGeometry args={[2.35, 1.45, 0.02]} />
+      <mesh position={[0, 0.02, 0.01]}>
+        <boxGeometry args={[2.0, 1.2, 0.015]} />
         <meshStandardMaterial 
-          color="#f4e0d4" // Warm sand/gold paper
-          roughness={0.5}
-          metalness={0.1}
+          color="#f4cda8" // Elegant soft gold tone
+          roughness={0.4}
+          metalness={0.2}
         />
       </mesh>
 
       {/* 3. Chrome Outlines (Silver metallic borders) */}
       {/* Left border */}
-      <mesh position={[-1.25, 0, 0]}>
-        <boxGeometry args={[0.03, 1.6, 0.12]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+      <mesh position={[-1.1, 0, 0]}>
+        <boxGeometry args={[0.02, 1.4, 0.09]} />
+        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
       </mesh>
       {/* Right border */}
-      <mesh position={[1.25, 0, 0]}>
-        <boxGeometry args={[0.03, 1.6, 0.12]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+      <mesh position={[1.1, 0, 0]}>
+        <boxGeometry args={[0.02, 1.4, 0.09]} />
+        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
       </mesh>
       {/* Top border */}
-      <mesh position={[0, 0.8, 0]}>
-        <boxGeometry args={[2.53, 0.03, 0.12]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+      <mesh position={[0, 0.7, 0]}>
+        <boxGeometry args={[2.22, 0.02, 0.09]} />
+        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
       </mesh>
       {/* Bottom border */}
-      <mesh position={[0, -0.8, 0]}>
-        <boxGeometry args={[2.53, 0.03, 0.12]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+      <mesh position={[0, -0.7, 0]}>
+        <boxGeometry args={[2.22, 0.02, 0.09]} />
+        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
       </mesh>
 
       {/* 4. Fold lines (V-flaps in metallic chrome) */}
       {/* Top Left-to-Center */}
-      <group position={[-0.625, 0.35, 0.065]} rotation={[0, 0, -0.64]}>
+      <group position={[-0.55, 0.3, 0.05]} rotation={[0, 0, -0.63]}>
         <mesh>
-          <boxGeometry args={[1.56, 0.025, 0.025]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+          <boxGeometry args={[1.37, 0.02, 0.02]} />
+          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
         </mesh>
       </group>
       {/* Top Right-to-Center */}
-      <group position={[0.625, 0.35, 0.065]} rotation={[0, 0, 0.64]}>
+      <group position={[0.55, 0.3, 0.05]} rotation={[0, 0, 0.63]}>
         <mesh>
-          <boxGeometry args={[1.56, 0.025, 0.025]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+          <boxGeometry args={[1.37, 0.02, 0.02]} />
+          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
         </mesh>
       </group>
 
       {/* Bottom Left-to-Center */}
-      <group position={[-0.625, -0.45, 0.065]} rotation={[0, 0, 0.51]}>
+      <group position={[-0.55, -0.375, 0.05]} rotation={[0, 0, 0.48]}>
         <mesh>
-          <boxGeometry args={[1.4, 0.025, 0.025]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+          <boxGeometry args={[1.25, 0.02, 0.02]} />
+          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
         </mesh>
       </group>
       {/* Bottom Right-to-Center */}
-      <group position={[0.625, -0.45, 0.065]} rotation={[0, 0, -0.51]}>
+      <group position={[0.55, -0.375, 0.05]} rotation={[0, 0, -0.48]}>
         <mesh>
-          <boxGeometry args={[1.4, 0.025, 0.025]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+          <boxGeometry args={[1.25, 0.02, 0.02]} />
+          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
         </mesh>
       </group>
 
       {/* Connection Seal Disk at center */}
-      <mesh position={[0, -0.1, 0.07]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.06, 0.06, 0.02, 32]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+      <mesh position={[0, -0.08, 0.05]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.05, 0.05, 0.015, 32]} />
+        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
       </mesh>
     </group>
   );
@@ -279,7 +279,7 @@ export default function Contact() {
                     <input 
                       type="text" 
                       name="name" 
-                      placeholder="Next name" 
+                      placeholder="Name" 
                       value={formData.name}
                       onChange={handleInputChange}
                       className="contact-capsule-input"
@@ -291,7 +291,7 @@ export default function Contact() {
                     <input 
                       type="email" 
                       name="email" 
-                      placeholder="Your snome" 
+                      placeholder="Email" 
                       value={formData.email}
                       onChange={handleInputChange}
                       className="contact-capsule-input"
@@ -303,11 +303,10 @@ export default function Contact() {
                     <input 
                       type="text" 
                       name="phone" 
-                      placeholder="Your your thrire" 
+                      placeholder="Phone" 
                       value={formData.phone}
                       onChange={handleInputChange}
                       className="contact-capsule-input"
-                      required
                     />
                   </div>
                   
@@ -315,7 +314,7 @@ export default function Contact() {
                     <input 
                       type="text" 
                       name="message" 
-                      placeholder="" 
+                      placeholder="Project details..." 
                       value={formData.message}
                       onChange={handleInputChange}
                       className="contact-capsule-input"
@@ -330,7 +329,7 @@ export default function Contact() {
                         onChange={handleInputChange}
                         className="contact-capsule-select"
                       >
-                        <option value="software"></option>
+                        <option value="software">Software</option>
                         <option value="web-dev">Web</option>
                         <option value="servers">Servers</option>
                       </select>
@@ -343,52 +342,18 @@ export default function Contact() {
                         onChange={handleInputChange}
                         className="contact-capsule-select"
                       >
-                        <option value="5-10k"></option>
-                        <option value="10-25k">Mid</option>
-                        <option value="25k+">High</option>
+                        <option value="5-10k">5-10k</option>
+                        <option value="10-25k">10-25k</option>
+                        <option value="25k+">25k+</option>
                       </select>
                     </div>
                     
                     <button type="submit" className="contact-submit-btn">
-                      Contact Us
+                      Send
                     </button>
                   </div>
                 </form>
               )}
-            </div>
-            
-            {/* Social Icons matching screenshot */}
-            <div className="contact-social-row">
-              <a href="#" className="social-icon-circle" aria-label="Facebook">
-                <span>f</span>
-              </a>
-              <a href="#" className="social-icon-circle" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-              <a href="#" className="social-icon-circle" aria-label="Twitter">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
-                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                </svg>
-              </a>
-              <a href="#" className="social-icon-circle" aria-label="YouTube">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
-                  <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.388.511a3.002 3.002 0 0 0-2.11 2.107C0 8.048 0 12 0 12s0 3.952.502 5.837a3.003 3.003 0 0 0 2.11 2.107c1.883.511 9.388.511 9.388.511s7.505 0 9.388-.511a3.002 3.002 0 0 0 2.11-2.107C24 15.952 24 12 24 12s0-3.952-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
-              <a href="#" className="social-icon-circle" aria-label="LinkedIn">
-                <span>in</span>
-              </a>
-              <a href="#" className="social-icon-circle" aria-label="X">
-                <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              <span className="social-dot-indicator"></span>
-              <span className="social-dot-indicator"></span>
             </div>
           </div>
           
@@ -408,23 +373,25 @@ export default function Contact() {
                     gl={{ antialias: true, alpha: true }}
                   >
                     <ambientLight intensity={1.8} />
+                    <Environment preset="sunset" />
+                    
                     <directionalLight position={[-4, -3, 3]} intensity={2.2} color="#f59e0b" />
                     <directionalLight position={[4, 4, 3]} intensity={3.5} color="#60a5fa" />
                     <spotLight position={[0, 5, 2]} intensity={2.0} angle={0.6} penumbra={0.5} />
                     
-                    <group position={[0.2, 0.1, 0]}>
+                    <group position={[0, 0.05, 0]}>
                       <GlassEnvelope />
                       
                       {/* Floating Orbs bobbing slightly out of sync */}
-                      <FloatingOrb position={[1.3, 1.2, -0.6]} size={0.3} speed={1.1} bobHeight={0.1} phase={0} />
-                      <FloatingOrb position={[-1.6, 0.9, -0.4]} size={0.2} speed={0.8} bobHeight={0.14} phase={Math.PI / 3} />
-                      <FloatingOrb position={[1.8, 0.4, -0.7]} size={0.14} speed={1.4} bobHeight={0.08} phase={Math.PI} />
-                      <FloatingOrb position={[0.8, -1.1, -1.0]} size={0.1} speed={0.9} bobHeight={0.07} phase={Math.PI * 1.5} />
+                      <FloatingOrb position={[1.2, 0.9, -0.5]} size={0.24} speed={1.1} bobHeight={0.08} phase={0} />
+                      <FloatingOrb position={[-1.2, 0.7, -0.3]} size={0.16} speed={0.8} bobHeight={0.1} phase={Math.PI / 3} />
+                      <FloatingOrb position={[1.4, 0.3, -0.6]} size={0.12} speed={1.4} bobHeight={0.06} phase={Math.PI} />
+                      <FloatingOrb position={[0.6, -0.8, -0.7]} size={0.08} speed={0.9} bobHeight={0.05} phase={Math.PI * 1.5} />
                       
                       {/* Shimmering Stars */}
-                      <SparklingStar position={[1.7, -0.6, -0.2]} scale={0.55} speed={2.3} phase={0} />
-                      <SparklingStar position={[1.3, 0.8, 0.15]} scale={0.35} speed={1.8} phase={Math.PI / 4} />
-                      <SparklingStar position={[2.0, -1.0, -0.4]} scale={0.45} speed={2.8} phase={Math.PI / 2} />
+                      <SparklingStar position={[1.3, -0.5, -0.1]} scale={0.4} speed={2.3} phase={0} />
+                      <SparklingStar position={[1.0, 0.6, 0.1]} scale={0.28} speed={1.8} phase={Math.PI / 4} />
+                      <SparklingStar position={[1.6, -0.8, -0.3]} scale={0.35} speed={2.8} phase={Math.PI / 2} />
                     </group>
                     
                     <OrbitControls enableZoom={false} enablePan={false} />
