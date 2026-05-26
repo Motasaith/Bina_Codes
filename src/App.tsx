@@ -10,8 +10,10 @@ export default function App() {
       <main>
         <Hero />
         <Services />
-        <About />
-        <Contact />
+        <div className="combined-sections-bg">
+          <About />
+          <Contact />
+        </div>
       </main>
       <Footer />
     </>

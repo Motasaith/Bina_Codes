@@ -182,3 +182,11 @@ button, input, textarea {
     transform: translateY(0);
   }
 }
+
+/* Wrapper to hold About and Contact sections together with a single seamless background */
+.combined-sections-bg {
+  background: url('/section_bg.png') no-repeat center center;
+  background-size: cover;
+  position: relative;
+  width: 100%;
+}
