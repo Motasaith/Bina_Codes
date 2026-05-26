@@ -363,8 +363,8 @@ export default function Services() {
                     />
                     <pointLight position={[0, -2, 5]} intensity={1.2} />
                     
-                    {/* Centered terminal group inside the canvas column */}
-                    <group position={[0, 0, 0]}>
+                    {/* Centered terminal group inside the canvas column, shifted to the right to prevent text overlap */}
+                    <group position={[0.35, 0, 0]}>
                       <InteractiveTerminal />
                     </group>
                     

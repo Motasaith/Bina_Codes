@@ -13,8 +13,8 @@
 /* ---- SERVICES TWO-COLUMN GRID ---- */
 .services-grid {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 4rem;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 3rem;
   align-items: center;
   position: relative;
   z-index: 10;
@@ -62,7 +62,7 @@
 /* Main title in Caveat Brush (handwritten) matching Hero title shape */
 .services-brush-title {
   font-family: 'Caveat Brush', 'Permanent Marker', 'Rock Salt', cursive;
-  font-size: 4.8rem;
+  font-size: 3.8rem;
   font-weight: 400;
   line-height: 0.88;
   letter-spacing: -0.5px;
