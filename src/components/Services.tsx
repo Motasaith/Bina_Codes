@@ -219,8 +219,8 @@ function TerminalScreen() {
 
 // 3D Laptop Model loader component with automatic floating/swaying animations
 function Laptop(props: React.ComponentProps<'group'>) {
-  // Let useGLTF handle the Draco decoder path locally.
-  const { nodes, materials } = (useGLTF('/macbook_ultra_concept.glb', '/draco/') as unknown) as GLTFResult;
+  // Restore the working CDN Draco loader path to ensure GLB loads successfully
+  const { nodes, materials } = (useGLTF('/macbook_ultra_concept.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/') as unknown) as GLTFResult;
 
   const groupRef = useRef<THREE.Group>(null);
 
@@ -279,12 +279,12 @@ function Laptop(props: React.ComponentProps<'group'>) {
         <mesh geometry={nodes.Object_22.geometry} material={materials.Camera_frame} />
         <mesh geometry={nodes.Object_23.geometry} material={materials.Camera_lens} />
         
-        {/* Interactive HTML Terminal Screen Overlay - occlude={false} ensures it is not covered by display glass */}
+        {/* Interactive HTML Terminal Screen Overlay - adjusted scale/distance factor to fit display bezel */}
         <Html
           transform
-          position={[0, 0.011, 0.083]}
+          position={[0, 0.012, 0.082]}
           rotation={[Math.PI / 2, 0, 0]}
-          distanceFactor={0.342}
+          distanceFactor={0.29}
         >
           <TerminalScreen />
         </Html>
@@ -320,6 +320,18 @@ function CanvasLoader() {
 }
 
 export default function Services() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Screen size listener to adjust the laptop's positioning dynamically (centered on mobile, offset right on desktop)
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 992);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <section id="services" className="services-section">
       {/* Decorative floating spheres */}
@@ -334,10 +346,11 @@ export default function Services() {
       <div className="services-sphere sphere-9"></div>
       
       <div className="container">
-        <div className="services-layout-grid">
+        {/* Full-width Canvas container with text overlay directly on top */}
+        <div className="canvas-container">
           
-          {/* Left Column: Software House Text Content (matches Hero Section brush style) */}
-          <div className="services-text-column">
+          {/* Floating Software House Copy (floats on the left, does not shrink the 3D layout) */}
+          <div className="services-overlay-content">
             <div className="services-chip">
               <span>Bina Cloud Mainframe</span>
               <span className="services-chip-arrow">→</span>
@@ -382,8 +395,8 @@ export default function Services() {
             </div>
           </div>
 
-          {/* Right Column: 3D Mainframe Section */}
-          <div className="canvas-container">
+          {/* Full-width 3D Canvas rendering underneath (wrapped for responsive height limits) */}
+          <div className="services-canvas-wrapper">
             <CanvasErrorBoundary>
               <Suspense fallback={<CanvasLoader />}>
                 <Canvas
@@ -410,7 +423,8 @@ export default function Services() {
                   />
                   <pointLight position={[0, -2, 5]} intensity={1.2} />
                   
-                  <group position={[0, -0.08, 0]} rotation={[0.08, -0.4, 0]}>
+                  {/* Laptop group: shifted to the right on desktop to prevent overlap with text */}
+                  <group position={[isMobile ? 0 : 0.12, -0.07, 0]} rotation={[0.08, -0.4, 0]}>
                     <Laptop />
                   </group>
                   
@@ -435,11 +449,10 @@ export default function Services() {
               </Suspense>
             </CanvasErrorBoundary>
           </div>
-          
         </div>
       </div>
     </section>
   );
 }
 
-useGLTF.preload('/macbook_ultra_concept.glb', '/draco/');
+useGLTF.preload('/macbook_ultra_concept.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
