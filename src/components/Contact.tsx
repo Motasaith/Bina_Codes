@@ -1,6 +1,6 @@
 import React, { useState, Suspense, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import '../styles/Contact.css';
 
@@ -64,14 +64,15 @@ function GlassEnvelope() {
       <mesh castShadow receiveShadow>
         <boxGeometry args={[2.2, 1.4, 0.08]} />
         <meshPhysicalMaterial 
-          transmission={0.95} 
-          roughness={0.05} 
-          thickness={0.6} 
-          ior={1.52} 
+          transmission={0.8} 
+          roughness={0.15} 
+          thickness={0.5} 
+          ior={1.3} 
           color="#ffffff" 
-          clearcoat={1.0} 
-          clearcoatRoughness={0.05}
+          clearcoat={0.9} 
+          clearcoatRoughness={0.1}
           transparent
+          opacity={0.35}
         />
       </mesh>
 
@@ -89,22 +90,22 @@ function GlassEnvelope() {
       {/* Left border */}
       <mesh position={[-1.1, 0, 0]}>
         <boxGeometry args={[0.02, 1.4, 0.09]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
       {/* Right border */}
       <mesh position={[1.1, 0, 0]}>
         <boxGeometry args={[0.02, 1.4, 0.09]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
       {/* Top border */}
       <mesh position={[0, 0.7, 0]}>
         <boxGeometry args={[2.22, 0.02, 0.09]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
       {/* Bottom border */}
       <mesh position={[0, -0.7, 0]}>
         <boxGeometry args={[2.22, 0.02, 0.09]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
 
       {/* 4. Fold lines (V-flaps in metallic chrome) */}
@@ -112,14 +113,14 @@ function GlassEnvelope() {
       <group position={[-0.55, 0.3, 0.05]} rotation={[0, 0, -0.63]}>
         <mesh>
           <boxGeometry args={[1.37, 0.02, 0.02]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+          <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
         </mesh>
       </group>
       {/* Top Right-to-Center */}
       <group position={[0.55, 0.3, 0.05]} rotation={[0, 0, 0.63]}>
         <mesh>
           <boxGeometry args={[1.37, 0.02, 0.02]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+          <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
         </mesh>
       </group>
 
@@ -127,21 +128,21 @@ function GlassEnvelope() {
       <group position={[-0.55, -0.375, 0.05]} rotation={[0, 0, 0.48]}>
         <mesh>
           <boxGeometry args={[1.25, 0.02, 0.02]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+          <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
         </mesh>
       </group>
       {/* Bottom Right-to-Center */}
       <group position={[0.55, -0.375, 0.05]} rotation={[0, 0, -0.48]}>
         <mesh>
           <boxGeometry args={[1.25, 0.02, 0.02]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+          <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
         </mesh>
       </group>
 
       {/* Connection Seal Disk at center */}
       <mesh position={[0, -0.08, 0.05]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.05, 0.05, 0.015, 32]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.02} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
     </group>
   );
@@ -170,14 +171,15 @@ function FloatingOrb({ position, size, speed, bobHeight, phase }: FloatingOrbPro
     <mesh ref={meshRef} position={position} castShadow>
       <sphereGeometry args={[size, 32, 32]} />
       <meshPhysicalMaterial 
-        transmission={0.9}
-        roughness={0.05}
-        thickness={size * 1.5}
-        ior={1.45}
+        transmission={0.8}
+        roughness={0.1}
+        thickness={size * 1.2}
+        ior={1.3}
         color="#fef08a" // warm orange/yellow tint inside orbs
-        clearcoat={1.0}
-        clearcoatRoughness={0.05}
+        clearcoat={0.9}
+        clearcoatRoughness={0.1}
         transparent
+        opacity={0.4}
       />
     </mesh>
   );
@@ -260,11 +262,11 @@ export default function Contact() {
 
   return (
     <section id="contact" className="contact-section">
-      <div className="contact-outer-card">
-        <div className="contact-content-grid">
+      <div className="container">
+        <div className="contact-grid">
           
           {/* Left panel: Form and Header */}
-          <div className="contact-left-col">
+          <div className="contact-content-col">
             <h2 className="contact-heading-main">Contact Us</h2>
             
             <div className="contact-form-glass-card">
@@ -358,7 +360,7 @@ export default function Contact() {
           </div>
           
           {/* Right panel: 3D Canvas */}
-          <div className="contact-right-col">
+          <div className="contact-canvas-col">
             <div className="contact-canvas-wrapper">
               <CanvasErrorBoundary>
                 <Suspense fallback={
@@ -373,7 +375,6 @@ export default function Contact() {
                     gl={{ antialias: true, alpha: true }}
                   >
                     <ambientLight intensity={1.8} />
-                    <Environment preset="sunset" />
                     
                     <directionalLight position={[-4, -3, 3]} intensity={2.2} color="#f59e0b" />
                     <directionalLight position={[4, 4, 3]} intensity={3.5} color="#60a5fa" />

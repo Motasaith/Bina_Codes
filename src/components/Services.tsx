@@ -1,6 +1,6 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Html, Environment } from '@react-three/drei';
+import { OrbitControls, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import '../styles/Services.css';
 
@@ -200,14 +200,15 @@ function InteractiveTerminal() {
       <mesh castShadow receiveShadow>
         <boxGeometry args={[3.2, 2.0, 0.08]} />
         <meshPhysicalMaterial 
-          transmission={0.9} 
-          roughness={0.05} 
-          thickness={0.5} 
-          ior={1.5} 
+          transmission={0.8} 
+          roughness={0.1} 
+          thickness={0.4} 
+          ior={1.3} 
           color="#e0f2fe" 
-          clearcoat={1.0} 
-          clearcoatRoughness={0.05}
+          clearcoat={0.9} 
+          clearcoatRoughness={0.1}
           transparent
+          opacity={0.4}
         />
       </mesh>
 
@@ -215,35 +216,35 @@ function InteractiveTerminal() {
       {/* Left bezel */}
       <mesh position={[-1.61, 0, 0]}>
         <boxGeometry args={[0.02, 2.0, 0.1]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
       {/* Right bezel */}
       <mesh position={[1.61, 0, 0]}>
         <boxGeometry args={[0.02, 2.0, 0.1]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
       {/* Top bezel */}
       <mesh position={[0, 1.01, 0]}>
         <boxGeometry args={[3.24, 0.02, 0.1]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
       {/* Bottom bezel */}
       <mesh position={[0, -1.01, 0]}>
         <boxGeometry args={[3.24, 0.02, 0.1]} />
-        <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+        <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
       </mesh>
 
       {/* 3. Screen Stand / Base */}
       <group position={[0, -1.15, -0.1]} rotation={[Math.PI / 6, 0, 0]}>
         <mesh>
           <cylinderGeometry args={[0.04, 0.04, 0.3, 16]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+          <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
         </mesh>
       </group>
       <group position={[0, -1.3, -0.2]} rotation={[Math.PI / 2, 0, 0]}>
         <mesh>
           <torusGeometry args={[0.35, 0.03, 16, 64]} />
-          <meshStandardMaterial color="#ffffff" metalness={1.0} roughness={0.05} />
+          <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.2} />
         </mesh>
       </group>
       
@@ -344,7 +345,6 @@ export default function Services() {
                     gl={{ antialias: true, alpha: true }}
                   >
                     <ambientLight intensity={1.8} />
-                    <Environment preset="sunset" />
                     
                     <directionalLight 
                       position={[5, 10, 5]} 

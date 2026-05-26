@@ -6,35 +6,25 @@
   z-index: 10;
 }
 
-/* Outer Premium Glassmorphic Card Container */
-.contact-outer-card {
-  max-width: 1250px;
-  width: 92%;
-  margin: 0 auto;
-  border-radius: 48px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(24px) saturate(110%);
-  -webkit-backdrop-filter: blur(24px) saturate(110%);
-  box-shadow: 
-    0 35px 80px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  padding: 4.5rem 5rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.contact-content-grid {
+/* ---- CONTACT TWO-COLUMN GRID ---- */
+.contact-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   gap: 5rem;
   align-items: center;
+  position: relative;
+  z-index: 10;
 }
 
-/* Left panel: Info & Form */
-.contact-left-col {
+.contact-content-col {
   display: flex;
   flex-direction: column;
+}
+
+.contact-canvas-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .contact-heading-main {
@@ -245,12 +235,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Right panel: 3D Canvas Space */
-.contact-right-col {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 .contact-canvas-wrapper {
   width: 100%;
@@ -327,21 +312,16 @@
 }
 
 @media (max-width: 992px) {
-  .contact-content-grid {
+  .contact-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-  
-  .contact-outer-card {
-    padding: 3.5rem 2.5rem;
-    border-radius: 40px;
   }
 
   .contact-canvas-wrapper {
     height: 380px;
   }
   
-  .contact-right-col {
+  .contact-canvas-col {
     order: -1; /* Place 3D model on top on mobile/tablet */
   }
 
@@ -354,11 +334,6 @@
 @media (max-width: 576px) {
   .contact-heading-main {
     font-size: 2.25rem;
-  }
-  
-  .contact-outer-card {
-    padding: 2.5rem 1.5rem;
-    border-radius: 32px;
   }
 
   .contact-form-glass-card {
