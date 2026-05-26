@@ -342,7 +342,7 @@ export default function Services() {
                 <Suspense fallback={<CanvasLoader />}>
                   <Canvas
                     shadows
-                    camera={{ position: [0, 0, 4.2], fov: 42 }}
+                    camera={{ position: [0, 0, 5.2], fov: 42 }}
                     gl={{ antialias: true, alpha: true }}
                   >
                     <ambientLight intensity={1.8} />
