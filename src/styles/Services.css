@@ -1,7 +1,6 @@
 /* ===================================================
    SERVICES / "BINA SERVERS" SECTION
-   Light beige area directly below the hero card.
-   Prominent floating glass spheres around the heading.
+   Interactive 3D Mainframe Space
    =================================================== */
 
 .services-section {
@@ -13,7 +12,7 @@
 
 .services-header {
   text-align: center;
-  margin-bottom: 4.5rem;
+  margin-bottom: 3.5rem;
   position: relative;
   z-index: 10;
 }
@@ -28,110 +27,194 @@
 
 .services-subtitle {
   font-family: var(--font-primary);
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1.6;
   color: var(--color-text-muted-dark);
-  max-width: 620px;
+  max-width: 650px;
   margin: 0 auto;
 }
 
-/* ---- SERVICE CARDS GRID ---- */
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+/* ---- 3D VIEWPORT CONTAINER ---- */
+.canvas-container {
+  width: 100%;
+  height: 550px;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(236, 230, 220, 0.15) 100%);
+  box-shadow: 
+    0 15px 40px rgba(142, 126, 105, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 10;
+  cursor: grab;
 }
 
-.service-card {
-  padding: 2.75rem 2rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(236, 230, 220, 0.3) 100%);
-  box-shadow: 0 10px 30px rgba(142, 126, 105, 0.04);
-  transition: var(--transition-smooth);
+.canvas-container:active {
+  cursor: grabbing;
+}
+
+/* ---- 3D LOADER FALLBACK ---- */
+.canvas-loader-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 1.25rem;
-  cursor: pointer;
-}
-
-.service-card:hover {
-  transform: translateY(-8px);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(236, 230, 220, 0.5) 100%);
-  border-color: var(--color-accent-gold);
-  box-shadow:
-    0 20px 45px rgba(78, 47, 29, 0.08),
-    0 0 20px rgba(249, 154, 60, 0.15);
-}
-
-.service-icon-box {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-md);
-  background: var(--color-brand-light);
-  border: 1px solid rgba(78, 47, 29, 0.1);
-  display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-brand-primary);
-  transition: var(--transition-smooth);
+  gap: 1.25rem;
 }
 
-.service-card:hover .service-icon-box {
-  background: var(--color-brand-primary);
-  color: var(--color-text-light);
-  transform: scale(1.05) rotate(5deg);
+.canvas-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(78, 47, 29, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--color-brand-primary);
+  animation: canvasSpin 1s linear infinite;
 }
 
-.service-card-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--color-brand-dark);
-}
-
-.service-card-desc {
+.canvas-loader-text {
   font-family: var(--font-primary);
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: var(--color-text-muted-dark);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-brand-dark);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-.service-status {
+@keyframes canvasSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- INTERACTIVE HTML TERMINAL OVERLAY ---- */
+.terminal-container {
+  width: 480px;
+  height: 300px;
+  background: rgba(18, 11, 8, 0.96);
+  border: 1.5px solid rgba(249, 154, 60, 0.35);
+  border-radius: 10px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(249, 154, 60, 0.15),
+    inset 0 0 35px rgba(0, 0, 0, 0.9);
+  font-family: 'Courier New', Courier, monospace;
+  color: #ffc285;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  backdrop-filter: blur(8px);
+  user-select: text;
+}
+
+.terminal-header {
+  height: 28px;
+  background: rgba(43, 20, 8, 0.95);
+  border-bottom: 1.5px solid rgba(249, 154, 60, 0.25);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: auto;
-  font-family: var(--font-primary);
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text-muted-dark);
+  padding: 0 12px;
+  position: relative;
+  flex-shrink: 0;
 }
 
-.status-dot {
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 8px #22c55e;
+}
+.dot.red { background: #ff5f56; }
+.dot.yellow { background: #ffbd2e; }
+.dot.green { background: #27c93f; }
+
+.terminal-title {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: bold;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
-.status-dot.active {
-  animation: pulseGreen 2s infinite;
+.terminal-body {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  font-size: 9px;
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: left;
 }
 
-@keyframes pulseGreen {
-  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-  70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+/* Scrollbar styling for terminal */
+.terminal-body::-webkit-scrollbar {
+  width: 5px;
+}
+.terminal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.terminal-body::-webkit-scrollbar-thumb {
+  background: rgba(249, 154, 60, 0.25);
+  border-radius: 3px;
+}
+
+.terminal-line {
+  color: #ffb86b;
+  text-shadow: 0 0 4px rgba(249, 154, 60, 0.35);
+  word-break: break-all;
+}
+
+.terminal-prompt {
+  color: #f99a3c;
+  font-weight: bold;
+}
+
+.terminal-banner-box {
+  margin-top: 8px;
+  border-top: 1px dashed rgba(249, 154, 60, 0.25);
+  padding-top: 8px;
+}
+
+.terminal-ascii {
+  font-size: 6.2px;
+  line-height: 1.1;
+  color: #ff9a3c;
+  text-shadow: 0 0 8px rgba(255, 154, 60, 0.65);
+  margin: 5px 0;
+  white-space: pre;
+  font-weight: bold;
+}
+
+.terminal-line.success {
+  color: #22c55e;
+  text-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+}
+
+.cursor-blink {
+  animation: terminalBlink 1s step-end infinite;
+  color: #f99a3c;
+  font-weight: bold;
+}
+
+@keyframes terminalBlink {
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* ===================================================
    FLOATING GLASS SPHERES
    Large golden/amber glass bubbles around the heading
-   area, matching the screenshot transition zone.
    =================================================== */
 
 .services-sphere {
@@ -141,7 +224,6 @@
   z-index: 2;
 }
 
-/* ---- Sphere 1: Large golden sphere, left side ---- */
 .sphere-1 {
   width: 160px;
   height: 160px;
@@ -162,7 +244,6 @@
   animation: sphereFloat 8s ease-in-out infinite alternate;
 }
 
-/* ---- Sphere 2: Large amber sphere, right side ---- */
 .sphere-2 {
   width: 180px;
   height: 180px;
@@ -183,7 +264,6 @@
   animation: sphereFloat 10s ease-in-out 1s infinite alternate-reverse;
 }
 
-/* ---- Sphere 3: Small translucent sphere, top-left near heading ---- */
 .sphere-3 {
   width: 50px;
   height: 50px;
@@ -202,7 +282,6 @@
   animation: sphereFloat 6s ease-in-out 0.5s infinite alternate;
 }
 
-/* ---- Sphere 4: Medium golden, bottom-left ---- */
 .sphere-4 {
   width: 70px;
   height: 70px;
@@ -222,7 +301,6 @@
   animation: sphereFloat 7s ease-in-out 2s infinite alternate-reverse;
 }
 
-/* ---- Sphere 5: Tiny sparkle, right side ---- */
 .sphere-5 {
   width: 22px;
   height: 22px;
@@ -238,7 +316,6 @@
   animation: sphereFloat 5s ease-in-out 1s infinite alternate;
 }
 
-/* ---- Sphere 6: Medium golden-amber, bottom-right ---- */
 .sphere-6 {
   width: 90px;
   height: 90px;
@@ -258,7 +335,6 @@
   animation: sphereFloat 9s ease-in-out 1.5s infinite alternate;
 }
 
-/* ---- Sphere 7: Translucent white bubble, left-center near second row ---- */
 .sphere-7 {
   width: 40px;
   height: 40px;
@@ -277,7 +353,6 @@
   animation: sphereFloat 7.5s ease-in-out 0.8s infinite alternate-reverse;
 }
 
-/* ---- Sphere 8: Sparkle amber bubble, top-center ---- */
 .sphere-8 {
   width: 28px;
   height: 28px;
@@ -293,7 +368,6 @@
   animation: sphereFloat 5.5s ease-in-out 0.2s infinite alternate;
 }
 
-/* ---- Sphere 9: Translucent golden, middle-right near first row ---- */
 .sphere-9 {
   width: 65px;
   height: 65px;
@@ -319,8 +393,8 @@
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 992px) {
-  .services-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .canvas-container {
+    height: 480px;
   }
 
   .sphere-1 { width: 100px; height: 100px; }
@@ -338,13 +412,8 @@
     font-size: 2.25rem;
   }
 
-  .services-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .service-card {
-    padding: 2rem 1.5rem;
+  .canvas-container {
+    height: 380px;
   }
 
   .sphere-1, .sphere-4, .sphere-6, .sphere-7, .sphere-8, .sphere-9 { display: none; }
