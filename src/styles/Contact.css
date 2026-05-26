@@ -14,12 +14,21 @@
   z-index: 10;
 }
 
-/* Left panel: Info */
+/* Left panel: Info glass card */
 .contact-info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 1.5rem;
+  padding: 3.5rem 3rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(35, 17, 7, 0.42);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .contact-tagline {
@@ -36,7 +45,6 @@
   color: #ffffff;
   font-weight: 800;
   line-height: 1.2;
-  text-shadow: 0 2px 10px rgba(35, 17, 7, 0.6);
 }
 
 .contact-desc {
@@ -45,7 +53,6 @@
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
   max-width: 450px;
-  text-shadow: 0 1px 3px rgba(35, 17, 7, 0.5);
 }
 
 .contact-details {
@@ -210,6 +217,10 @@
     grid-template-columns: 1fr;
     gap: 4rem;
   }
+
+  .contact-info {
+    padding: 3rem 2rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -218,6 +229,10 @@
   }
   
   .contact-form-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .contact-info {
     padding: 2rem 1.5rem;
   }
 }
