@@ -317,14 +317,6 @@ export default function Services() {
       <div className="services-sphere sphere-9"></div>
       
       <div className="container">
-        <div className="services-header">
-          <h2 className="services-title">Bina Servers</h2>
-          <p className="services-subtitle">
-            Experience our interactive high-performance server control room. Drag to rotate the 
-            mainframe node, hover to inspect, and watch the system execute workloads in real-time.
-          </p>
-        </div>
-
         {/* 3D Mainframe Section */}
         <div className="canvas-container">
           <CanvasErrorBoundary>
