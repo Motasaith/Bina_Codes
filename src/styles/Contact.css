@@ -1,6 +1,7 @@
 .contact-section {
   padding: 8rem 0;
-  background: linear-gradient(180deg, var(--color-bg-dune-light) 0%, var(--color-bg-base) 100%);
+  background: url('/section_bg.png') no-repeat bottom center;
+  background-size: cover;
   position: relative;
   overflow: hidden;
 }
@@ -33,7 +34,7 @@
 
 .contact-title {
   font-size: 2.75rem;
-  color: var(--color-brand-dark);
+  color: #ffffff;
   font-weight: 800;
   line-height: 1.2;
 }
@@ -42,7 +43,7 @@
   font-family: var(--font-primary);
   font-size: 1.05rem;
   line-height: 1.7;
-  color: var(--color-text-muted-dark);
+  color: rgba(255, 255, 255, 0.85);
   max-width: 450px;
 }
 
@@ -64,18 +65,18 @@
   width: 48px;
   height: 48px;
   border-radius: var(--radius-md);
-  background: rgba(78, 47, 29, 0.08);
-  border: 1px solid rgba(78, 47, 29, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-brand-primary);
+  color: #ffffff;
   transition: var(--transition-quick);
 }
 
 .contact-detail-item:hover .contact-icon-box {
-  background: var(--color-brand-primary);
-  color: var(--color-text-light);
+  background: #ffffff;
+  color: var(--color-brand-dark);
   transform: scale(1.05);
 }
 
@@ -88,14 +89,14 @@
   font-family: var(--font-primary);
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--color-text-muted-dark);
+  color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
 }
 
 .contact-detail-value {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--color-brand-dark);
+  color: #ffffff;
 }
 
 /* Right panel: Glassmorphism Form */

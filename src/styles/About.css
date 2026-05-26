@@ -1,6 +1,7 @@
 .about-section {
   padding: 8rem 0;
-  background: linear-gradient(180deg, var(--color-bg-base) 0%, var(--color-bg-dune-light) 100%);
+  background: url('/section_bg.png') no-repeat top center;
+  background-size: cover;
   position: relative;
   overflow: hidden;
 }
