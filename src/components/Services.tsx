@@ -1,5 +1,5 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, OrbitControls, ContactShadows, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import type { GLTF } from 'three-stdlib';
@@ -143,13 +143,13 @@ function TerminalScreen() {
       const timeout = setTimeout(() => {
         setLogs((prev) => [...prev, bootSequence[bootIndex]]);
         setBootIndex((prev) => prev + 1);
-      }, 200);
+      }, 150);
       return () => clearTimeout(timeout);
     } else if (!showBanner) {
       const timeout = setTimeout(() => {
         setShowBanner(true);
         setLogs((prev) => [...prev, "System active. Launching shell..."]);
-      }, 400);
+      }, 300);
       return () => clearTimeout(timeout);
     }
   }, [bootIndex]);
@@ -169,12 +169,12 @@ function TerminalScreen() {
           const sliced = prev.length > 40 ? prev.slice(prev.length - 20) : prev;
           return [...sliced, `[TRAFFIC] ${randomIp} - GET ${randomEnd} - 200 OK (${randomTime})`];
         });
-      }, 2000);
+      }, 1800);
       return () => clearInterval(interval);
     }
   }, [showBanner]);
 
-  // Auto scroll effect locally within the terminal body container (prevents window scrolling)
+  // Auto scroll effect
   useEffect(() => {
     if (terminalBodyRef.current) {
       terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
@@ -217,10 +217,28 @@ function TerminalScreen() {
   );
 }
 
-// 3D Laptop Model loader component
+// 3D Laptop Model loader component with automatic floating/swaying animations
 function Laptop(props: React.ComponentProps<'group'>) {
   // Let useGLTF handle the Draco decoder path locally.
   const { nodes, materials } = (useGLTF('/macbook_ultra_concept.glb', '/draco/') as unknown) as GLTFResult;
+
+  const groupRef = useRef<THREE.Group>(null);
+
+  // Gentle float/tilt/spin animation to signal it is a 3D model automatically on load/scroll
+  useFrame((state) => {
+    if (groupRef.current) {
+      const elapsed = state.clock.getElapsedTime();
+      
+      // Float vertically (swaying hover)
+      groupRef.current.position.y = Math.sin(elapsed * 1.3) * 0.015;
+      
+      // Gentle side-to-side rotation (indicates 3D automatically)
+      groupRef.current.rotation.y = Math.sin(elapsed * 0.6) * 0.15;
+      
+      // Gentle pitch tilt
+      groupRef.current.rotation.x = Math.cos(elapsed * 0.8) * 0.025;
+    }
+  });
 
   useEffect(() => {
     if (nodes && materials) {
@@ -239,7 +257,7 @@ function Laptop(props: React.ComponentProps<'group'>) {
   }, [nodes, materials]);
   
   return (
-    <group {...props} dispose={null}>
+    <group ref={groupRef} {...props} dispose={null}>
       {/* Base parts */}
       <group position={[0, 0, 0.008]}>
         <mesh geometry={nodes.Object_9.geometry} material={materials.Keycap} />
@@ -261,13 +279,12 @@ function Laptop(props: React.ComponentProps<'group'>) {
         <mesh geometry={nodes.Object_22.geometry} material={materials.Camera_frame} />
         <mesh geometry={nodes.Object_23.geometry} material={materials.Camera_lens} />
         
-        {/* Interactive HTML Terminal Screen Overlay */}
+        {/* Interactive HTML Terminal Screen Overlay - occlude={false} ensures it is not covered by display glass */}
         <Html
           transform
-          occlude
-          position={[0, 0.012, 0.082]}
+          position={[0, 0.011, 0.083]}
           rotation={[Math.PI / 2, 0, 0]}
-          distanceFactor={0.175}
+          distanceFactor={0.342}
         >
           <TerminalScreen />
         </Html>
@@ -317,64 +334,108 @@ export default function Services() {
       <div className="services-sphere sphere-9"></div>
       
       <div className="container">
-        {/* 3D Mainframe Section */}
-        <div className="canvas-container">
-          <CanvasErrorBoundary>
-            <Suspense fallback={<CanvasLoader />}>
-              <Canvas
-                shadows
-                camera={{ position: [0, 0.45, 0.45], fov: 42 }}
-                gl={{ antialias: true, alpha: true }}
-              >
-                <ambientLight intensity={1.8} />
-                
-                {/* Strategic premium studio lighting */}
-                <directionalLight 
-                  position={[5, 10, 5]} 
-                  intensity={2.5} 
-                  castShadow 
-                  shadow-mapSize-width={1024} 
-                  shadow-mapSize-height={1024} 
-                />
-                <spotLight 
-                  position={[-5, 8, 5]} 
-                  angle={0.25} 
-                  penumbra={1} 
-                  intensity={2.0} 
-                  castShadow 
-                />
-                <pointLight position={[0, -2, 5]} intensity={1.2} />
-                
-                {/* Visual red test box: if this renders, WebGL and R3F are functional. */}
-                <mesh position={[0, 0.15, 0]}>
-                  <boxGeometry args={[0.02, 0.02, 0.02]} />
-                  <meshBasicMaterial color="#ff3333" wireframe />
-                </mesh>
+        <div className="services-layout-grid">
+          
+          {/* Left Column: Software House Text Content (matches Hero Section brush style) */}
+          <div className="services-text-column">
+            <div className="services-chip">
+              <span>Bina Cloud Mainframe</span>
+              <span className="services-chip-arrow">→</span>
+            </div>
+            
+            <h2 className="services-brush-title">
+              <span className="brush-title-line">BINA</span>
+              <span className="brush-title-line">SERVERS</span>
+            </h2>
+            
+            <p className="services-brush-desc">
+              We deploy premium cloud infrastructure, active database nodes, and custom 
+              backend networks engineered specifically for forward-thinking software houses. 
+              Our architecture optimizes highly reliable query processing with uninterrupted focus.
+            </p>
+            
+            <div className="services-bullet-list">
+              <div className="services-bullet-item">
+                <div className="bullet-icon-wrapper">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="3">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  </svg>
+                </div>
+                <div className="bullet-text-wrapper">
+                  <h4>High-Performance Mainframe</h4>
+                  <p>Equipped with GPU node arrays optimized for AI inference and web sockets.</p>
+                </div>
+              </div>
 
-                <group position={[0, -0.08, 0]} rotation={[0.08, -0.4, 0]}>
-                  <Laptop />
-                </group>
-                
-                {/* Smooth user controls */}
-                <OrbitControls 
-                  enableZoom={false} 
-                  minPolarAngle={Math.PI / 4} 
-                  maxPolarAngle={Math.PI / 2.1} 
-                  minAzimuthAngle={-Math.PI / 3} 
-                  maxAzimuthAngle={Math.PI / 3} 
-                />
-                
-                {/* Ground shadows underneath the laptop */}
-                <ContactShadows 
-                  position={[0, -0.085, 0]} 
-                  opacity={0.45} 
-                  scale={2.2} 
-                  blur={1.8} 
-                  far={1.0} 
-                />
-              </Canvas>
-            </Suspense>
-          </CanvasErrorBoundary>
+              <div className="services-bullet-item">
+                <div className="bullet-icon-wrapper">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="3">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </div>
+                <div className="bullet-text-wrapper">
+                  <h4>Zero-Trust Security Core</h4>
+                  <p>Enforced edge-query filters keeping server nodes completely shielded.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: 3D Mainframe Section */}
+          <div className="canvas-container">
+            <CanvasErrorBoundary>
+              <Suspense fallback={<CanvasLoader />}>
+                <Canvas
+                  shadows
+                  camera={{ position: [0, 0.45, 0.45], fov: 42 }}
+                  gl={{ antialias: true, alpha: true }}
+                >
+                  <ambientLight intensity={1.8} />
+                  
+                  {/* Strategic premium studio lighting */}
+                  <directionalLight 
+                    position={[5, 10, 5]} 
+                    intensity={2.5} 
+                    castShadow 
+                    shadow-mapSize-width={1024} 
+                    shadow-mapSize-height={1024} 
+                  />
+                  <spotLight 
+                    position={[-5, 8, 5]} 
+                    angle={0.25} 
+                    penumbra={1} 
+                    intensity={2.0} 
+                    castShadow 
+                  />
+                  <pointLight position={[0, -2, 5]} intensity={1.2} />
+                  
+                  <group position={[0, -0.08, 0]} rotation={[0.08, -0.4, 0]}>
+                    <Laptop />
+                  </group>
+                  
+                  {/* Smooth user controls - limited rotation prevents full 360 spin */}
+                  <OrbitControls 
+                    enableZoom={false} 
+                    minPolarAngle={Math.PI / 4} 
+                    maxPolarAngle={Math.PI / 2.1} 
+                    minAzimuthAngle={-Math.PI / 3} 
+                    maxAzimuthAngle={Math.PI / 3} 
+                  />
+                  
+                  {/* Ground shadows underneath the laptop */}
+                  <ContactShadows 
+                    position={[0, -0.085, 0]} 
+                    opacity={0.45} 
+                    scale={2.2} 
+                    blur={1.8} 
+                    far={1.0} 
+                  />
+                </Canvas>
+              </Suspense>
+            </CanvasErrorBoundary>
+          </div>
+          
         </div>
       </div>
     </section>

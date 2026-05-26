@@ -5,39 +5,137 @@
 
 .services-section {
   background-color: var(--color-bg-base);
-  padding: 5rem 0 6rem 0;
+  padding: 6rem 0;
   position: relative;
   overflow: visible;
 }
 
-.services-header {
-  text-align: center;
-  margin-bottom: 3.5rem;
+/* ---- 2-COLUMN LAYOUT GRID ---- */
+.services-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 4.5rem;
+  align-items: center;
   position: relative;
   z-index: 10;
 }
 
-.services-title {
-  font-size: 3.25rem;
-  color: var(--color-brand-dark);
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-bottom: 1rem;
+/* ---- LEFT COLUMN: BRUSH COPY ---- */
+.services-text-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  text-align: left;
 }
 
-.services-subtitle {
+/* Chip tag matching hero */
+.services-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: var(--color-bg-dune-light);
+  border: 1px solid rgba(78, 47, 29, 0.15);
+  border-radius: var(--radius-full);
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-brand-primary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  box-shadow: 0 4px 10px rgba(78, 47, 29, 0.03);
+}
+
+.services-chip-arrow {
+  color: var(--color-accent-gold);
+  font-weight: 800;
+}
+
+/* Main title in Caveat Brush (handwritten) matching Hero title shape */
+.services-brush-title {
+  font-family: 'Caveat Brush', 'Permanent Marker', 'Rock Salt', cursive;
+  font-size: 5rem;
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.5px;
+  color: #4e2f1d; /* Solid dark chocolate color */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transform: rotate(-2.5deg) skewX(-2deg);
+  text-shadow: 
+    2px 2px 0px rgba(255, 255, 255, 0.8),
+    4px 4px 12px rgba(78, 47, 29, 0.18);
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.brush-title-line {
+  display: inline-block;
+}
+
+.services-brush-desc {
   font-family: var(--font-primary);
   font-size: 1.05rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--color-text-muted-dark);
-  max-width: 650px;
-  margin: 0 auto;
+  max-width: 520px;
+  margin-bottom: 1.5rem;
+}
+
+/* Features checklist inside text column */
+.services-bullet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.services-bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.15rem;
+}
+
+.bullet-icon-wrapper {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--color-brand-light);
+  border: 1px solid rgba(78, 47, 29, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-brand-primary);
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  box-shadow: 0 4px 10px rgba(142, 126, 105, 0.05);
+}
+
+.bullet-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.bullet-text-wrapper h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-brand-dark);
+}
+
+.bullet-text-wrapper p {
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  color: var(--color-text-muted-dark);
+  line-height: 1.5;
 }
 
 /* ---- 3D VIEWPORT CONTAINER ---- */
 .canvas-container {
   width: 100%;
-  height: 550px;
+  height: 520px;
   border-radius: var(--radius-xl);
   border: 1px solid rgba(255, 255, 255, 0.45);
   background-image: url('/3d_model_bg.png');
@@ -94,15 +192,15 @@
 
 /* ---- INTERACTIVE HTML TERMINAL OVERLAY ---- */
 .terminal-container {
-  width: 480px;
-  height: 300px;
+  width: 940px;
+  height: 590px;
   background: rgba(18, 11, 8, 0.96);
-  border: 1.5px solid rgba(249, 154, 60, 0.35);
-  border-radius: 10px;
+  border: 2px solid rgba(249, 154, 60, 0.35);
+  border-radius: 14px;
   box-shadow: 
-    0 10px 40px rgba(0, 0, 0, 0.6),
-    0 0 25px rgba(249, 154, 60, 0.15),
-    inset 0 0 35px rgba(0, 0, 0, 0.9);
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(249, 154, 60, 0.15),
+    inset 0 0 45px rgba(0, 0, 0, 0.9);
   font-family: 'Courier New', Courier, monospace;
   color: #ffc285;
   display: flex;
@@ -114,24 +212,24 @@
 }
 
 .terminal-header {
-  height: 28px;
+  height: 38px;
   background: rgba(43, 20, 8, 0.95);
-  border-bottom: 1.5px solid rgba(249, 154, 60, 0.25);
+  border-bottom: 2px solid rgba(249, 154, 60, 0.25);
   display: flex;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 16px;
   position: relative;
   flex-shrink: 0;
 }
 
 .terminal-dots {
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
 }
 .dot.red { background: #ff5f56; }
@@ -139,7 +237,7 @@
 .dot.green { background: #27c93f; }
 
 .terminal-title {
-  font-size: 10px;
+  font-size: 15px;
   color: rgba(255, 255, 255, 0.55);
   font-weight: bold;
   position: absolute;
@@ -150,31 +248,31 @@
 
 .terminal-body {
   flex: 1;
-  padding: 14px;
+  padding: 22px;
   overflow-y: auto;
-  font-size: 9px;
-  line-height: 1.45;
+  font-size: 15px;
+  line-height: 1.5;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
   text-align: left;
 }
 
 /* Scrollbar styling for terminal */
 .terminal-body::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
 }
 .terminal-body::-webkit-scrollbar-track {
   background: transparent;
 }
 .terminal-body::-webkit-scrollbar-thumb {
   background: rgba(249, 154, 60, 0.25);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .terminal-line {
   color: #ffb86b;
-  text-shadow: 0 0 4px rgba(249, 154, 60, 0.35);
+  text-shadow: 0 0 5px rgba(249, 154, 60, 0.35);
   word-break: break-all;
 }
 
@@ -184,24 +282,24 @@
 }
 
 .terminal-banner-box {
-  margin-top: 8px;
-  border-top: 1px dashed rgba(249, 154, 60, 0.25);
-  padding-top: 8px;
+  margin-top: 12px;
+  border-top: 1.5px dashed rgba(249, 154, 60, 0.25);
+  padding-top: 12px;
 }
 
 .terminal-ascii {
-  font-size: 6.2px;
-  line-height: 1.1;
+  font-size: 11px;
+  line-height: 1.15;
   color: #ff9a3c;
-  text-shadow: 0 0 8px rgba(255, 154, 60, 0.65);
-  margin: 5px 0;
+  text-shadow: 0 0 10px rgba(255, 154, 60, 0.65);
+  margin: 10px 0;
   white-space: pre;
   font-weight: bold;
 }
 
 .terminal-line.success {
   color: #22c55e;
-  text-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+  text-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
 }
 
 .cursor-blink {
@@ -215,9 +313,51 @@
   50% { opacity: 0; }
 }
 
+/* ---- WebGL Error diagnostic container ---- */
+.canvas-error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(43, 20, 8, 0.85);
+  border: 1px solid rgba(249, 154, 60, 0.3);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-light);
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.canvas-error-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+.canvas-error-subtitle {
+  font-family: var(--font-primary);
+  font-size: 0.92rem;
+  color: var(--color-text-muted-light);
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.canvas-error-details {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  color: #ff9a9a;
+  word-break: break-all;
+  white-space: pre-wrap;
+  width: 100%;
+}
+
 /* ===================================================
    FLOATING GLASS SPHERES
-   Large golden/amber glass bubbles around the heading
    =================================================== */
 
 .services-sphere {
@@ -396,8 +536,28 @@
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 992px) {
+  .services-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
   .canvas-container {
     height: 480px;
+  }
+
+  .services-brush-title {
+    font-size: 4.25rem;
+    align-items: center;
+    transform: none;
+    text-align: center;
+  }
+  .services-text-column {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .services-brush-desc {
+    max-width: 600px;
   }
 
   .sphere-1 { width: 100px; height: 100px; }
@@ -411,8 +571,8 @@
     padding: 4rem 0 5rem 0;
   }
 
-  .services-title {
-    font-size: 2.25rem;
+  .services-brush-title {
+    font-size: 3.5rem;
   }
 
   .canvas-container {
