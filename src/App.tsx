@@ -2,6 +2,7 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import About from './components/About';
 import Contact from './components/Contact';
+import Cta from './components/Cta';
 import Footer from './components/Footer';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
           <About />
           <Contact />
         </div>
+        <Cta />
       </main>
       <Footer />
     </>
