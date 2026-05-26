@@ -63,6 +63,45 @@ type GLTFResult = GLTF & {
   }
 }
 
+// React Error Boundary to catch 3D Canvas crashes
+class CanvasErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: string }
+> {
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false, error: '' };
+  }
+
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true, error: error?.message || 'Unknown WebGL/R3F rendering error' };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error("CanvasErrorBoundary caught error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="canvas-error-container">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#f99a3c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '1rem' }}>
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <h4 className="canvas-error-title">3D Mainframe Load Failed</h4>
+          <p className="canvas-error-subtitle">
+            There was an error initializing the 3D Canvas. This is often due to missing WebGL support or a model loading failure.
+          </p>
+          <pre className="canvas-error-details">{this.state.error}</pre>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 // Interactive Terminal Screen component rendered inside the 3D model
 function TerminalScreen() {
   const [logs, setLogs] = useState<string[]>([]);
@@ -104,13 +143,13 @@ function TerminalScreen() {
       const timeout = setTimeout(() => {
         setLogs((prev) => [...prev, bootSequence[bootIndex]]);
         setBootIndex((prev) => prev + 1);
-      }, 250);
+      }, 200);
       return () => clearTimeout(timeout);
     } else if (!showBanner) {
       const timeout = setTimeout(() => {
         setShowBanner(true);
         setLogs((prev) => [...prev, "System active. Launching shell..."]);
-      }, 500);
+      }, 400);
       return () => clearTimeout(timeout);
     }
   }, [bootIndex]);
@@ -127,11 +166,10 @@ function TerminalScreen() {
         const randomTime = times[Math.floor(Math.random() * times.length)];
         
         setLogs((prev) => {
-          // Limit logs count to keep memory light
-          const sliced = prev.length > 50 ? prev.slice(prev.length - 25) : prev;
+          const sliced = prev.length > 40 ? prev.slice(prev.length - 20) : prev;
           return [...sliced, `[TRAFFIC] ${randomIp} - GET ${randomEnd} - 200 OK (${randomTime})`];
         });
-      }, 2500);
+      }, 2000);
       return () => clearInterval(interval);
     }
   }, [showBanner]);
@@ -180,8 +218,24 @@ function TerminalScreen() {
 
 // 3D Laptop Model loader component
 function Laptop(props: React.ComponentProps<'group'>) {
-  // Use the local compressed GLB, passing Draco decoder path
-  const { nodes, materials } = (useGLTF('/macbook_ultra_concept.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/') as unknown) as GLTFResult;
+  // Let useGLTF handle the Draco decoder path locally.
+  const { nodes, materials } = (useGLTF('/macbook_ultra_concept.glb', '/draco/') as unknown) as GLTFResult;
+
+  useEffect(() => {
+    if (nodes && materials) {
+      console.log("3D Laptop Model Loaded Successfully!", { nodes, materials });
+      try {
+        const geom = nodes.Object_5.geometry;
+        geom.computeBoundingBox();
+        if (geom.boundingBox) {
+          const size = geom.boundingBox.getSize(new THREE.Vector3());
+          console.log("3D Model Size Coordinates:", size);
+        }
+      } catch (e) {
+        console.error("Could not compute bounding box on Object_5:", e);
+      }
+    }
+  }, [nodes, materials]);
   
   return (
     <group {...props} dispose={null}>
@@ -210,7 +264,6 @@ function Laptop(props: React.ComponentProps<'group'>) {
         <Html
           transform
           occlude
-          // Positioned slightly in front of the screen mesh to prevent z-fighting
           position={[0, 0.012, 0.082]}
           rotation={[Math.PI / 2, 0, 0]}
           distanceFactor={0.175}
@@ -273,58 +326,66 @@ export default function Services() {
 
         {/* 3D Mainframe Section */}
         <div className="canvas-container">
-          <Suspense fallback={<CanvasLoader />}>
-            <Canvas
-              shadows
-              camera={{ position: [0, 0.45, 0.45], fov: 42 }}
-              gl={{ antialias: true, alpha: true }}
-            >
-              <ambientLight intensity={1.8} />
-              
-              {/* Strategic premium studio lighting */}
-              <directionalLight 
-                position={[5, 10, 5]} 
-                intensity={2.5} 
-                castShadow 
-                shadow-mapSize-width={1024} 
-                shadow-mapSize-height={1024} 
-              />
-              <spotLight 
-                position={[-5, 8, 5]} 
-                angle={0.25} 
-                penumbra={1} 
-                intensity={2.0} 
-                castShadow 
-              />
-              <pointLight position={[0, -2, 5]} intensity={1.2} />
-              
-              <group position={[0, -0.08, 0]} rotation={[0.08, -0.4, 0]}>
-                <Laptop />
-              </group>
-              
-              {/* Smooth user controls */}
-              <OrbitControls 
-                enableZoom={false} 
-                minPolarAngle={Math.PI / 4} 
-                maxPolarAngle={Math.PI / 2.1} 
-                minAzimuthAngle={-Math.PI / 3} 
-                maxAzimuthAngle={Math.PI / 3} 
-              />
-              
-              {/* Ground shadows underneath the laptop */}
-              <ContactShadows 
-                position={[0, -0.085, 0]} 
-                opacity={0.45} 
-                scale={2.2} 
-                blur={1.8} 
-                far={1.0} 
-              />
-            </Canvas>
-          </Suspense>
+          <CanvasErrorBoundary>
+            <Suspense fallback={<CanvasLoader />}>
+              <Canvas
+                shadows
+                camera={{ position: [0, 0.45, 0.45], fov: 42 }}
+                gl={{ antialias: true, alpha: true }}
+              >
+                <ambientLight intensity={1.8} />
+                
+                {/* Strategic premium studio lighting */}
+                <directionalLight 
+                  position={[5, 10, 5]} 
+                  intensity={2.5} 
+                  castShadow 
+                  shadow-mapSize-width={1024} 
+                  shadow-mapSize-height={1024} 
+                />
+                <spotLight 
+                  position={[-5, 8, 5]} 
+                  angle={0.25} 
+                  penumbra={1} 
+                  intensity={2.0} 
+                  castShadow 
+                />
+                <pointLight position={[0, -2, 5]} intensity={1.2} />
+                
+                {/* Visual red test box: if this renders, WebGL and R3F are functional. */}
+                <mesh position={[0, 0.15, 0]}>
+                  <boxGeometry args={[0.02, 0.02, 0.02]} />
+                  <meshBasicMaterial color="#ff3333" wireframe />
+                </mesh>
+
+                <group position={[0, -0.08, 0]} rotation={[0.08, -0.4, 0]}>
+                  <Laptop />
+                </group>
+                
+                {/* Smooth user controls */}
+                <OrbitControls 
+                  enableZoom={false} 
+                  minPolarAngle={Math.PI / 4} 
+                  maxPolarAngle={Math.PI / 2.1} 
+                  minAzimuthAngle={-Math.PI / 3} 
+                  maxAzimuthAngle={Math.PI / 3} 
+                />
+                
+                {/* Ground shadows underneath the laptop */}
+                <ContactShadows 
+                  position={[0, -0.085, 0]} 
+                  opacity={0.45} 
+                  scale={2.2} 
+                  blur={1.8} 
+                  far={1.0} 
+                />
+              </Canvas>
+            </Suspense>
+          </CanvasErrorBoundary>
         </div>
       </div>
     </section>
   );
 }
 
-useGLTF.preload('/macbook_ultra_concept.glb');
+useGLTF.preload('/macbook_ultra_concept.glb', '/draco/');
