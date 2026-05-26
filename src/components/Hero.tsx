@@ -77,7 +77,10 @@ export default function Hero() {
               <span className="hero-chip-arrow">→</span>
             </div>
 
-            <h1 className="hero-title">Build Together</h1>
+            <h1 className="hero-title">
+              <span className="hero-title-line">BINA</span>
+              <span className="hero-title-line">CODES</span>
+            </h1>
 
             <p className="hero-desc">
               Leading the next platform enabling every single design,

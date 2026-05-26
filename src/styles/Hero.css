@@ -119,13 +119,25 @@
 
 /* Main Title */
 .hero-title {
-  font-family: var(--font-accent);
-  font-size: 4.25rem;
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -1.5px;
-  color: #ffffff;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+  font-family: 'Caveat Brush', 'Permanent Marker', 'Rock Salt', cursive;
+  font-size: 6rem;
+  font-weight: 400;
+  line-height: 0.85;
+  letter-spacing: -0.5px;
+  color: #fbf9f5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transform: rotate(-3deg) skewX(-2deg);
+  text-shadow: 
+    3px 3px 0px rgba(35, 17, 7, 0.15),
+    5px 5px 15px rgba(35, 17, 7, 0.45);
+  margin-bottom: 0.75rem;
+}
+
+.hero-title-line {
+  display: inline-block;
+  font-style: normal;
 }
 
 /* Description text */
@@ -322,7 +334,7 @@
   }
 
   .hero-title {
-    font-size: 3.25rem;
+    font-size: 4.5rem;
   }
 }
 
@@ -349,7 +361,8 @@
   }
 
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
+    align-items: center;
   }
 
   .hero-bubble--1 {
@@ -375,7 +388,7 @@
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 2rem;
+    font-size: 2.8rem;
   }
 
   .hero-chip {
