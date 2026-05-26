@@ -11,6 +11,7 @@ export default function App() {
         <Hero />
         <Services />
         <div className="combined-sections-bg">
+          <div className="combined-sections-bg-image"></div>
           <About />
           <Contact />
         </div>
