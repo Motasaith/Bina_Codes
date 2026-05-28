@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
@@ -6,12 +6,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Manifesto from './components/Manifesto';
 import Services from './components/Services';
 import Process from './components/Process';
 import TechStack from './components/TechStack';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import LoadingScreen from './components/LoadingScreen';
 
 // Pages
 import ServicesPage from './pages/ServicesPage';
@@ -49,6 +51,7 @@ function ScrollToHash() {
 
 export default function App() {
   const progressRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -87,6 +90,8 @@ export default function App() {
 
   return (
     <>
+      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+
       <ScrollToHash />
 
       {/* Scroll Progress Bar */}
@@ -117,6 +122,7 @@ export default function App() {
           element={
             <main>
               <Hero />
+              <Manifesto />
               <Services />
               <Process />
               <TechStack />
