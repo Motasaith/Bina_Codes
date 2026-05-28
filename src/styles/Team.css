@@ -140,15 +140,96 @@
   color: var(--color-text-muted-dark);
 }
 
+/* Tablets */
 @media (max-width: 992px) {
+  .team-section {
+    padding: 3rem 0;
+  }
+
   .team-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 700px;
+    padding: 0 1.5rem;
+  }
+
+  .team-header {
+    margin-bottom: 2.5rem;
   }
 }
 
+/* Phones */
+@media (max-width: 768px) {
+  .team-header {
+    padding: 0 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    max-width: 500px;
+    padding: 0 1.25rem;
+  }
+
+  .team-card-avatar {
+    font-size: 2rem;
+  }
+
+  .team-card-overlay {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .team-card-bio {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .team-card-name {
+    font-size: 1rem;
+  }
+
+  .team-card-role {
+    font-size: 0.8rem;
+  }
+}
+
+/* Small phones */
 @media (max-width: 576px) {
   .team-grid {
-    grid-template-columns: 1fr;
-    max-width: 280px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .team-card-photo {
+    border-radius: var(--radius-md);
+  }
+
+  .team-social-link {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 400px) {
+  .team-header {
+    padding: 0 1rem;
+  }
+
+  .team-grid {
+    gap: 0.75rem;
+    padding: 0 0.75rem;
+  }
+
+  .team-card-overlay {
+    padding: 0.75rem;
+  }
+
+  .team-card-bio {
+    font-size: 0.72rem;
   }
 }

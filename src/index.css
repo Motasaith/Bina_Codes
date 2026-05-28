@@ -123,12 +123,33 @@ button, input, textarea {
   padding: 8rem 0;
 }
 
+@media (max-width: 992px) {
+  .section-padding {
+    padding: 6rem 0;
+  }
+}
+
 @media (max-width: 768px) {
   .section-padding {
     padding: 5rem 0;
   }
   .container {
     padding: 0 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .section-padding {
+    padding: 3.5rem 0;
+  }
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    padding: 0 0.75rem;
   }
 }
 
@@ -237,6 +258,14 @@ button, input, textarea {
 .hover-lift:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(78, 47, 29, 0.15);
+}
+
+/* Disable hover-lift on touch devices */
+@media (hover: none) {
+  .hover-lift:hover {
+    transform: none;
+    box-shadow: none;
+  }
 }
 
 /* Magnetic button base */

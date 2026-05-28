@@ -150,9 +150,44 @@
   line-height: 1.7;
 }
 
+/* Tablets */
+@media (max-width: 992px) {
+  .process-section {
+    padding: 3rem 0;
+  }
+
+  .process-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .process-timeline {
+    padding: 0 1.5rem;
+    max-width: 700px;
+  }
+
+  .process-step {
+    gap: 1.5rem;
+  }
+
+  .process-step-content {
+    max-width: 280px;
+  }
+
+  .process-step-node {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Phones */
 @media (max-width: 768px) {
   .process-section {
     padding: 3rem 0;
+  }
+
+  .process-header {
+    padding: 0 1.5rem;
+    margin-bottom: 2rem;
   }
   
   .process-line-svg {
@@ -169,6 +204,7 @@
   .process-step-content {
     align-items: flex-start !important;
     text-align: left !important;
+    max-width: 100%;
   }
   
   .process-step-node {
@@ -182,5 +218,66 @@
   
   .process-step-title {
     font-size: 1.25rem;
+  }
+
+  .process-steps {
+    gap: 2.5rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 576px) {
+  .process-timeline {
+    padding: 0 1rem;
+  }
+
+  .process-line-svg {
+    left: 24px;
+  }
+
+  .process-step {
+    gap: 1rem;
+  }
+
+  .process-step-node {
+    width: 42px;
+    height: 42px;
+  }
+
+  .process-step-number {
+    font-size: 1.75rem;
+  }
+
+  .process-step-title {
+    font-size: 1.1rem;
+  }
+
+  .process-step-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .process-steps {
+    gap: 2rem;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 400px) {
+  .process-header {
+    padding: 0 1rem;
+  }
+
+  .process-timeline {
+    padding: 0 0.75rem;
+  }
+
+  .process-step-node {
+    width: 36px;
+    height: 36px;
+  }
+
+  .process-step-node::before {
+    inset: -3px;
   }
 }

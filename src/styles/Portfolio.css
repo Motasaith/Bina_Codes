@@ -99,7 +99,7 @@
 }
 
 .portfolio-project-desc {
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
   line-height: 1.7;
   margin-bottom: 1.25rem;
   color: rgba(253, 251, 247, 0.85);
@@ -129,21 +129,116 @@
   display: inline-block;
 }
 
+/* Tablets */
+@media (max-width: 992px) {
+  .portfolio-section {
+    padding: 3rem 0;
+  }
+
+  .portfolio-projects {
+    gap: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .portfolio-project {
+    height: 50vh;
+    min-height: 350px;
+    border-radius: var(--radius-lg);
+  }
+
+  .portfolio-content {
+    padding: 2rem;
+    max-width: 500px;
+  }
+}
+
+/* Phones */
 @media (max-width: 768px) {
   .portfolio-section {
     padding: 3rem 0;
+  }
+
+  .portfolio-header {
+    margin-bottom: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .portfolio-projects {
+    gap: 1.5rem;
+    padding: 0 1.25rem;
   }
   
   .portfolio-project {
     height: 45vh;
     min-height: 320px;
+    border-radius: var(--radius-md);
   }
   
   .portfolio-content {
     padding: 1.5rem;
+    max-width: 100%;
   }
   
   .portfolio-project-name {
     font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+
+  .portfolio-project-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .portfolio-tag-item {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.72rem;
+  }
+
+  .portfolio-link {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 576px) {
+  .portfolio-projects {
+    gap: 1.25rem;
+    padding: 0 1rem;
+  }
+
+  .portfolio-project {
+    height: auto;
+    min-height: 280px;
+    aspect-ratio: 4/3;
+    border-radius: var(--radius-sm);
+  }
+
+  .portfolio-content {
+    padding: 1.25rem;
+  }
+
+  .portfolio-tags {
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 400px) {
+  .portfolio-header {
+    padding: 0 1rem;
+  }
+
+  .portfolio-project {
+    min-height: 240px;
+  }
+
+  .portfolio-content {
+    padding: 1rem;
+  }
+
+  .portfolio-project-desc {
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
 }

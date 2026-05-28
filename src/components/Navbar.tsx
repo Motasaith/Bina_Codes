@@ -48,10 +48,9 @@ export default function Navbar() {
         <a href="#contact" className="nav-link">Contact</a>
       </nav>
 
-      {/* Desktop Authentication Button */}
+      {/* Desktop CTA Button */}
       <div className="nav-auth">
-        <a href="#contact" className="btn-login">Log in</a>
-        <a href="#contact" className="btn-signup">Sign Up</a>
+        <a href="#contact" className="btn-get-invoice">Get Quote</a>
       </div>
 
       {/* Hamburger Button for Mobile */}
@@ -75,8 +74,7 @@ export default function Navbar() {
         </nav>
         
         <div className="nav-auth-mobile">
-          <a href="#contact" className="btn-login-mobile" onClick={handleLinkClick}>Log in</a>
-          <a href="#contact" className="btn-signup-mobile" onClick={handleLinkClick}>Sign Up</a>
+          <a href="#contact" className="btn-get-invoice-mobile" onClick={handleLinkClick}>Get Quote</a>
         </div>
       </div>
     </header>

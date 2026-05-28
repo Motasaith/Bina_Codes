@@ -82,6 +82,8 @@
   color: var(--color-text-dark);
   font-size: 0.95rem;
   transition: all 0.3s ease;
+  /* Prevent zoom on focus for iOS */
+  font-size: 16px;
 }
 
 .contact-form-element input::placeholder,
@@ -186,6 +188,7 @@
   font-size: 0.9rem;
   color: var(--color-text-dark);
   transition: color 0.3s ease;
+  word-break: break-word;
 }
 
 .contact-detail-value:hover {
@@ -312,10 +315,18 @@
   50% { opacity: 0.7; transform: translateX(-50%) scale(0.9); }
 }
 
+/* Tablets */
 @media (max-width: 992px) {
+  .contact-section {
+    padding: 3rem 0;
+    min-height: auto;
+  }
+
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 2.5rem;
+    max-width: 600px;
+    padding: 0 1.5rem;
   }
   
   .paper-envelope {
@@ -327,14 +338,101 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
+  .contact-envelope-col {
+    order: -1;
+    padding: 1rem;
+  }
 }
 
+/* Phones */
 @media (max-width: 768px) {
   .contact-section {
     padding: 3rem 0;
   }
+
+  .contact-header {
+    margin-bottom: 2rem;
+    padding: 0 1.5rem;
+  }
   
   .contact-grid {
-    padding: 0 1.5rem;
+    padding: 0 1.25rem;
+    gap: 2rem;
+  }
+
+  .paper-envelope {
+    width: 200px;
+    height: 130px;
+  }
+
+  .wax-seal {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+
+  .letter-lines {
+    padding: 16px 14px;
+    gap: 7px;
+  }
+
+  .letter-line {
+    height: 2px;
+  }
+
+  .contact-form-element label {
+    font-size: 0.75rem;
+  }
+
+  .contact-submit {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .contact-success {
+    padding: 1.75rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 576px) {
+  .contact-grid {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+
+  .contact-envelope-col {
+    padding: 0.5rem;
+  }
+
+  .paper-envelope {
+    width: 180px;
+    height: 115px;
+  }
+
+  .contact-detail-value {
+    font-size: 0.82rem;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 400px) {
+  .contact-header {
+    padding: 0 1rem;
+  }
+
+  .contact-grid {
+    padding: 0 0.75rem;
+  }
+
+  .contact-form-element input,
+  .contact-form-element select,
+  .contact-form-element textarea {
+    padding: 0.65rem 0.85rem;
+  }
+
+  .contact-submit {
+    width: 100%;
   }
 }

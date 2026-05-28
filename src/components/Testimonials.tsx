@@ -35,6 +35,10 @@ export default function Testimonials() {
     const cards = cardsRef.current;
     if (!section || !cards) return;
 
+    // Skip the card-dealt animation on mobile — let CSS handle the stacked layout
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) return;
+
     const cardEls = cards.querySelectorAll('.testimonial-card');
 
     const tl = gsap.timeline({

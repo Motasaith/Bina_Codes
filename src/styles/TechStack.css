@@ -227,7 +227,14 @@
 }
 
 /* ---- RESPONSIVE ---- */
+
+/* Large tablets */
 @media (max-width: 992px) {
+  .techstack-section {
+    padding: 3rem 0 4rem;
+    min-height: auto;
+  }
+
   .techstack-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 1.25rem;
@@ -240,15 +247,72 @@
   }
 }
 
-@media (max-width: 576px) {
+/* Phones */
+@media (max-width: 768px) {
+  .techstack-section {
+    padding: 3rem 0;
+  }
+
+  .techstack-header {
+    margin-bottom: 2rem;
+    padding: 0 1.5rem;
+  }
+
   .techstack-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
-    max-width: 400px;
+    max-width: 480px;
+    padding: 0 1.5rem;
+  }
+
+  .tech-card {
+    border-radius: var(--radius-md);
   }
 
   .tech-card-icon {
     width: 36px;
     height: 36px;
+  }
+
+  .tech-card-tooltip {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.7rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 576px) {
+  .techstack-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    max-width: 360px;
+    padding: 0 1.25rem;
+  }
+
+  .tech-card-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .tech-card {
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* Very small phones */
+@media (max-width: 400px) {
+  .techstack-header {
+    padding: 0 1rem;
+  }
+
+  .techstack-grid {
+    max-width: 300px;
+    gap: 0.6rem;
+    padding: 0 1rem;
+  }
+
+  .tech-card-icon {
+    width: 28px;
+    height: 28px;
   }
 }

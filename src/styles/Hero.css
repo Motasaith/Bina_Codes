@@ -8,7 +8,9 @@
 .hero-section {
   padding: 0;
   min-height: 80vh;
+  min-height: 80dvh;
   height: 80vh;
+  height: 80dvh;
   display: flex;
   align-items: stretch;
   position: relative;
@@ -19,7 +21,9 @@
 .hero-card {
   width: 100%;
   min-height: 80vh;
+  min-height: 80dvh;
   height: 80vh;
+  height: 80dvh;
   border-radius: 0 0 28px 28px;
   position: relative;
   overflow: hidden;
@@ -74,7 +78,9 @@
   align-items: center;
   justify-content: flex-end;
   min-height: 80vh;
+  min-height: 80dvh;
   height: 80vh;
+  height: 80dvh;
 }
 
 /* ---- RIGHT COLUMN: TEXT ---- */
@@ -88,39 +94,10 @@
   width: 100%;
 }
 
-/* Chip / Tag */
-.hero-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 1.5rem;
-  background: rgba(120, 80, 50, 0.45);
-  border: 1px solid rgba(200, 170, 140, 0.3);
-  border-radius: var(--radius-full);
-  font-family: var(--font-primary);
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  cursor: pointer;
-  transition: var(--transition-quick);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-.hero-chip:hover {
-  background: rgba(120, 80, 50, 0.6);
-  transform: translateY(-1px);
-}
-
-.hero-chip-arrow {
-  color: var(--color-accent-gold);
-  font-weight: 700;
-}
-
 /* Main Title */
 .hero-title {
   font-family: 'Caveat Brush', 'Permanent Marker', 'Rock Salt', cursive;
-  font-size: 6rem;
+  font-size: clamp(2.5rem, 6vw, 6rem);
   font-weight: 400;
   line-height: 0.85;
   letter-spacing: -0.5px;
@@ -143,7 +120,7 @@
 /* Description text */
 .hero-desc {
   font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive;
-  font-size: 1.1rem;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
   font-weight: 500;
   line-height: 1.65;
   color: rgba(235, 220, 205, 0.9);
@@ -329,26 +306,83 @@
    RESPONSIVE BREAKPOINTS
    =================================================== */
 
+/* Large tablets / small desktops */
 @media (max-width: 1100px) {
   .hero-content {
     padding: 7rem 2.5rem 5rem 2.5rem;
   }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  .hero-section,
+  .hero-card {
+    min-height: 75vh;
+    min-height: 75dvh;
+    height: 75vh;
+    height: 75dvh;
+  }
+
+  .hero-content {
+    min-height: 75vh;
+    min-height: 75dvh;
+    height: 75vh;
+    height: 75dvh;
+    padding: 6rem 2rem 3rem 2rem;
+    justify-content: center;
+  }
+
+  .hero-text-column {
+    max-width: 520px;
+    align-items: center;
+    text-align: center;
+  }
 
   .hero-title {
-    font-size: 4.5rem;
+    align-items: center;
+  }
+
+  .hero-desc {
+    max-width: 100%;
+  }
+
+  .hero-video-overlay {
+    background:
+      linear-gradient(180deg, rgba(30, 15, 5, 0.15) 0%, rgba(30, 15, 5, 0.4) 50%, rgba(30, 15, 5, 0.6) 100%);
+  }
+
+  .hero-nav-arrows {
+    right: 1rem;
+  }
+
+  .hero-nav-arrow {
+    width: 32px;
+    height: 32px;
   }
 }
 
+/* Phones landscape / small tablets */
 @media (max-width: 768px) {
+  .hero-section,
+  .hero-card {
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0 0 20px 20px;
+  }
+
   .hero-card {
     border-radius: 0 0 20px 20px;
-    min-height: 80vh;
-    height: 80vh;
   }
 
   .hero-content {
     justify-content: center;
     padding: 6rem 1.5rem 2rem 1.5rem;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
   }
 
   .hero-text-column {
@@ -362,7 +396,6 @@
   }
 
   .hero-title {
-    font-size: 3.5rem;
     align-items: center;
   }
 
@@ -387,18 +420,49 @@
   }
 }
 
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 2.8rem;
+/* Small phones */
+@media (max-width: 576px) {
+  .hero-section,
+  .hero-card {
+    border-radius: 0 0 16px 16px;
   }
 
-  .hero-chip {
-    font-size: 0.78rem;
-    padding: 0.45rem 1.1rem;
+  .hero-content {
+    padding: 5.5rem 1.25rem 2rem 1.25rem;
+  }
+
+  .hero-text-column {
+    gap: 1rem;
+  }
+
+  .hero-desc {
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 400px) {
+  .hero-content {
+    padding: 5rem 1rem 1.5rem 1rem;
   }
 
   .btn-hero-cta {
-    padding: 0.8rem 1.75rem;
-    font-size: 0.9rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .hero-bubble--1 {
+    width: 35px;
+    height: 35px;
+  }
+
+  .hero-bubble--4,
+  .hero-bubble--5 {
+    display: none;
+  }
+
+  .hero-pagination {
+    bottom: 1rem;
   }
 }

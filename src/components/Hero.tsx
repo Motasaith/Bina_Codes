@@ -72,11 +72,6 @@ export default function Hero() {
         {/* ---- RIGHT SIDE TEXT CONTENT ---- */}
         <div className="hero-content">
           <div className="hero-text-column">
-            <div className="hero-chip">
-              <span>Ronal Svefiit</span>
-              <span className="hero-chip-arrow">→</span>
-            </div>
-
             <h1 className="hero-title">
               <span className="hero-title-line">BINA</span>
               <span className="hero-title-line">CODES</span>
