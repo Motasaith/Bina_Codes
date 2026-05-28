@@ -53,8 +53,11 @@
 }
 
 .brand-name {
+  font-family: 'Caveat Brush', cursive;
+  font-size: 1.7rem;
+  letter-spacing: 0.5px;
+  line-height: 1;
   color: #ffffff;
-  letter-spacing: -0.3px;
 }
 
 .navbar.scrolled .brand-name {

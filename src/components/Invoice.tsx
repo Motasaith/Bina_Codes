@@ -55,10 +55,7 @@ export default function Invoice({
         <div className="invoice-header-left">
           <div className="invoice-brand">
             <span className="invoice-brand-icon">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <path d="M12 3L4 9v11h16V9l-8-6zm6 15H6V10l6-4.5 6 4.5v8z" opacity="0.4"/>
-                <path d="M12 5.5L6 10v7h12v-7l-6-4.5zM12 8a2 2 0 110 4 2 2 0 010-4z"/>
-              </svg>
+              <img src="/Logo.png" alt="Bina Codes Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
             </span>
             <span className="invoice-brand-name">Bina Codes</span>
           </div>
@@ -170,10 +167,7 @@ export default function Invoice({
           <div className="invoice-wax-seal-wrapper">
             <div className="wax-seal">
               <div className="wax-seal-inner">
-                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor">
-                  <path d="M12 3L4 9v11h16V9l-8-6zm6 15H6V10l6-4.5 6 4.5v8z" opacity="0.4"/>
-                  <path d="M12 5.5L6 10v7h12v-7l-6-4.5zM12 8a2 2 0 110 4 2 2 0 010-4z"/>
-                </svg>
+                <img src="/Logo.png" alt="Bina Codes Seal Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'brightness(0) invert(1) opacity(0.8)' }} />
               </div>
             </div>
             <div className="wax-seal-label">

@@ -60,11 +60,7 @@ export default function Navbar() {
       {/* Brand/Logo */}
       <div className="nav-brand" onClick={handleBrandClick}>
         <span className="brand-icon">
-          <svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor">
-            {/* Hexagonal/house shape similar to the logo in the screenshot */}
-            <path d="M12 3L4 9v11h16V9l-8-6zm6 15H6V10l6-4.5 6 4.5v8z" opacity="0.4"/>
-            <path d="M12 5.5L6 10v7h12v-7l-6-4.5zM12 8a2 2 0 110 4 2 2 0 010-4z"/>
-          </svg>
+          <img src="/Logo.png" alt="Bina Codes Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
         </span>
         <span className="brand-name">Bina Codes</span>
       </div>
