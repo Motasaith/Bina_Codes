@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback } from 'react';
-import Navbar from './Navbar';
 import '../styles/Hero.css';
 
 export default function Hero() {
@@ -47,9 +46,6 @@ export default function Hero() {
 
         {/* Warm gradient overlay for text readability */}
         <div className="hero-video-overlay" />
-
-        {/* ---- NAVBAR (inside the card, on top of video) ---- */}
-        <Navbar />
 
         {/* ---- FLOATING GLASS BUBBLES ---- */}
         <div className="hero-bubble hero-bubble--1" />

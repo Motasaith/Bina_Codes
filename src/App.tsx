@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Manifesto from './components/Manifesto';
 import Services from './components/Services';
@@ -12,7 +14,38 @@ import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
+// Pages
+import ServicesPage from './pages/ServicesPage';
+import QuotePage from './pages/QuotePage';
+
 gsap.registerPlugin(ScrollTrigger);
+
+// Helper component to handle scrolling to hash elements and top of page on route change
+function ScrollToHash() {
+  const { hash, pathname } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '');
+      const timer = setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [hash, pathname]);
+
+  useEffect(() => {
+    // Recalculate ScrollTrigger positions on route changes
+    ScrollTrigger.refresh();
+  }, [hash, pathname]);
+
+  return null;
+}
 
 export default function App() {
   const progressRef = useRef<HTMLDivElement>(null);
@@ -54,9 +87,12 @@ export default function App() {
 
   return (
     <>
+      <ScrollToHash />
+
       {/* Scroll Progress Bar */}
       <div
         ref={progressRef}
+        className="no-print"
         style={{
           position: 'fixed',
           top: 0,
@@ -71,16 +107,32 @@ export default function App() {
         }}
       />
 
-      <main>
-        <Hero />
-        <Manifesto />
-        <Services />
-        <Process />
-        <TechStack />
-        <Testimonials />
-        <Contact />
-      </main>
-      <Footer />
+      <div className="no-print">
+        <Navbar />
+      </div>
+
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <main>
+              <Hero />
+              <Manifesto />
+              <Services />
+              <Process />
+              <TechStack />
+              <Testimonials />
+              <Contact />
+            </main>
+          }
+        />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/quote" element={<QuotePage />} />
+      </Routes>
+
+      <div className="no-print">
+        <Footer />
+      </div>
     </>
   );
 }

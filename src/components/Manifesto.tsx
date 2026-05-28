@@ -91,7 +91,7 @@ export default function Manifesto() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="manifesto-section">
+    <section ref={sectionRef} id="about" className="manifesto-section">
       <div ref={particlesRef} className="manifesto-particles" />
       <div ref={linesRef} className="manifesto-content">
         {manifestoLines.map((line, i) => (

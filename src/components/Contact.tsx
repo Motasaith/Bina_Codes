@@ -64,7 +64,7 @@ export default function Contact() {
   };
 
   return (
-    <section ref={sectionRef} className="contact-section">
+    <section ref={sectionRef} id="contact" className="contact-section">
       <div className="contact-header">
         <span className="contact-tag">Get in Touch</span>
         <h2 className="contact-title">Start the Conversation</h2>
