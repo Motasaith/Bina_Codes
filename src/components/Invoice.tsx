@@ -55,7 +55,7 @@ export default function Invoice({
         <div className="invoice-header-left">
           <div className="invoice-brand">
             <span className="invoice-brand-icon">
-              <img src="/Logo.png" alt="Bina Codes Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+              <img src="/Logo.png" alt="Bina Codes Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </span>
             <span className="invoice-brand-name">Bina Codes</span>
           </div>
