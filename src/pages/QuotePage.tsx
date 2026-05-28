@@ -1,73 +1,80 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { CATEGORIES, SERVICES, CURRENCIES, formatPrice } from '../data/services';
+import { SERVICES, CURRENCIES, BUNDLES, formatPrice } from '../data/services';
+import type { Bundle } from '../data/services';
 import Invoice from '../components/Invoice';
 import '../styles/QuotePage.css';
+
+// Popular quick search suggestion tags
+const SUGGESTION_TAGS = [
+  'MERN App',
+  'AI Chatbot',
+  'Figma Design',
+  'WordPress Site',
+  'SEO Audit',
+  'Shopify Store',
+  'Workflow Automation',
+  'Cloud Setup'
+];
+
+// Popular fallback services to display when search query is empty
+const POPULAR_SERVICE_IDS = [
+  'web-mern',
+  'ai-chatbot',
+  'cms-wp-custom',
+  'design-ux',
+  'shop-shopify',
+  'design-seo'
+];
 
 export default function QuotePage() {
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedCurrency, setSelectedCurrency] = useState(CURRENCIES[0]); // Default to PKR
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Form states
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     company: '',
-    projectName: '',
     description: '',
-    timeline: '1-month',
-    techStack: '',
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [isInvoiceGenerated, setIsInvoiceGenerated] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
+  const [showPrintableInvoice, setShowPrintableInvoice] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Auto-select service from URL parameter
   useEffect(() => {
     const serviceParam = searchParams.get('service');
     if (serviceParam) {
-      const serviceObj = SERVICES.find((s) => s.id === serviceParam);
-      if (serviceObj) {
+      if (SERVICES.some((s) => s.id === serviceParam)) {
         setSelectedServices([serviceParam]);
-        // Expand the category of this service
-        setExpandedCategories({
-          [serviceObj.category]: true,
-        });
-      }
-    } else {
-      // Pre-expand first category
-      if (CATEGORIES.length > 0) {
-        setExpandedCategories({
-          [CATEGORIES[0].id]: true,
-        });
       }
     }
 
-    // Generate unique invoice number
+    // Generate unique reference ID
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const year = new Date().getFullYear().toString().substring(2);
     setInvoiceNumber(`BC-${year}-${randomNum}`);
   }, [searchParams]);
 
-  // Toggle service selection
-  const handleServiceToggle = (serviceId: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(serviceId)
-        ? prev.filter((id) => id !== serviceId)
-        : [...prev, serviceId]
-    );
+  const handleAddService = (serviceId: string) => {
+    if (!selectedServices.includes(serviceId)) {
+      setSelectedServices((prev) => [...prev, serviceId]);
+    }
   };
 
-  // Toggle category expansion
-  const toggleCategory = (categoryId: string) => {
-    setExpandedCategories((prev) => ({
-      ...prev,
-      [categoryId]: !prev[categoryId],
-    }));
+  const handleRemoveService = (serviceId: string) => {
+    setSelectedServices((prev) => prev.filter((id) => id !== serviceId));
+  };
+
+  const handleApplyBundle = (bundle: Bundle) => {
+    // Select all services in the bundle
+    setSelectedServices(bundle.serviceIds);
   };
 
   // Calculate current total in PKR
@@ -76,14 +83,37 @@ export default function QuotePage() {
     return sum + (service ? service.basePricePKR : 0);
   }, 0);
 
+  // Check active bundles (all serviceIds are selected)
+  const activeBundles = BUNDLES.filter((bundle) =>
+    bundle.serviceIds.every((id) => selectedServices.includes(id))
+  );
+
+  // Calculate bundle discounts
+  const totalDiscountPKR = activeBundles.reduce((sum, bundle) => sum + bundle.discountPKR, 0);
+  const grandTotalPKR = Math.max(0, totalPKR - totalDiscountPKR);
+
+  // Filter services based on search query
+  const searchResults = SERVICES.filter((service) => {
+    if (!searchQuery.trim()) return false;
+    const query = searchQuery.toLowerCase();
+    
+    return (
+      service.name.toLowerCase().includes(query) ||
+      service.description.toLowerCase().includes(query) ||
+      service.category.toLowerCase().includes(query) ||
+      service.whatsIncluded.some((item) => item.toLowerCase().includes(query))
+    );
+  });
+
+  // Get fallback popular services
+  const popularServices = SERVICES.filter((s) => POPULAR_SERVICE_IDS.includes(s.id));
+
   // Validate form in Step 2
   const validateForm = () => {
     const errors: Record<string, string> = {};
     if (!formData.name.trim()) errors.name = 'Full name is required';
     if (!formData.email.trim()) errors.email = 'Email address is required';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = 'Invalid email address';
-    if (!formData.projectName.trim()) errors.projectName = 'Project name is required';
-    if (!formData.description.trim()) errors.description = 'Project description is required';
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -92,23 +122,19 @@ export default function QuotePage() {
   const handleNextStep = () => {
     if (step === 1) {
       if (selectedServices.length === 0) {
-        alert('Please select at least one service to proceed.');
+        alert('Please select at least one service to see your estimate.');
         return;
       }
       setStep(2);
       window.scrollTo(0, 0);
-    } else if (step === 2) {
-      if (validateForm()) {
-        setStep(3);
-        window.scrollTo(0, 0);
-      }
     }
   };
 
   const handlePrevStep = () => {
     if (step > 1) {
-      setStep((prev) => prev - 1);
-      setIsInvoiceGenerated(false);
+      setStep(1);
+      setIsSubmitted(false);
+      setShowPrintableInvoice(false);
       window.scrollTo(0, 0);
     }
   };
@@ -121,15 +147,29 @@ export default function QuotePage() {
     }
   };
 
-  const handleGenerateInvoice = () => {
-    setIsInvoiceGenerated(true);
-    // Scroll to invoice section
-    setTimeout(() => {
-      const el = document.getElementById('printable-invoice-area');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
+  const handleSubmitQuote = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      setIsSubmitted(true);
+      
+      // Compile selected services text for email
+      const servicesText = selectedServices
+        .map((id, index) => {
+          const s = SERVICES.find(srv => srv.id === id);
+          return s ? `${index + 1}. ${s.name} (${formatPrice(s.basePricePKR, selectedCurrency)})` : '';
+        })
+        .join('%0D%0A');
+
+      const bundlesText = activeBundles.length > 0
+        ? `Applied Bundles: ${activeBundles.map(b => b.name).join(', ')}%0D%0A`
+        : '';
+
+      // Open mailto link
+      const emailSubject = `Project Quote Request: ${invoiceNumber}`;
+      const emailBody = `Hi Bina Codes Team,%0D%0A%0D%0AI built a custom project scope on your quote builder and would like to connect.%0D%0A%0D%0A--- CLIENT DETAILS ---%0D%0AName: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0ACompany: ${formData.company || 'N/A'}%0D%0A%0D%0A--- ESTIMATE SUMMARY ---%0D%0AReference ID: ${invoiceNumber}%0D%0ASelected Services:%0D%0A${servicesText}%0D%0A%0D%0A${bundlesText}Subtotal: ${formatPrice(totalPKR, selectedCurrency)}%0D%0ABundle Discount: -${formatPrice(totalDiscountPKR, selectedCurrency)}%0D%0AEstimated Grand Total: ${formatPrice(grandTotalPKR, selectedCurrency)}%0D%0A%0D%0AAdditional Notes: ${formData.description || 'None'}%0D%0A%0D%0APlease schedule a kickoff call with me.%0D%0A%0D%0AThanks,%0D%0A${formData.name}`;
+      
+      window.location.href = `mailto:hello@binacodes.com?subject=${emailSubject}&body=${emailBody}`;
+    }
   };
 
   return (
@@ -140,358 +180,468 @@ export default function QuotePage() {
         <div className="quote-page-hero-content">
           <h1 className="quote-page-title">Project Quote Builder</h1>
           <p className="quote-page-subtitle">
-            Configure your custom scope, define details, and generate a printable estimation instantly.
+            Search services, select packages, and get your estimated project quote instantly without any form filling.
           </p>
 
           {/* Stepper progress */}
-          {!isInvoiceGenerated && (
-            <div className="quote-stepper">
-              <div className={`step-node ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
-                <div className="step-number">{step > 1 ? '✓' : '1'}</div>
-                <div className="step-label">Select Services</div>
-              </div>
-              <div className="step-line">
-                <div className="step-line-progress" style={{ width: step === 2 ? '50%' : step === 3 ? '100%' : '0%' }}></div>
-              </div>
-              <div className={`step-node ${step >= 2 ? 'active' : ''} ${step > 2 ? 'completed' : ''}`}>
-                <div className="step-number">{step > 2 ? '✓' : '2'}</div>
-                <div className="step-label">Project Details</div>
-              </div>
-              <div className="step-line">
-                <div className="step-line-progress" style={{ width: step === 3 ? '100%' : '0%' }}></div>
-              </div>
-              <div className={`step-node ${step >= 3 ? 'active' : ''}`}>
-                <div className="step-number">3</div>
-                <div className="step-label">Review & Invoice</div>
-              </div>
+          <div className="quote-stepper">
+            <div className={`step-node ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
+              <div className="step-number">{step > 1 ? '✓' : '1'}</div>
+              <div className="step-label">Get Instant Quote</div>
             </div>
-          )}
+            <div className="step-line">
+              <div className="step-line-progress" style={{ width: step === 2 ? '100%' : '0%' }}></div>
+            </div>
+            <div className={`step-node ${step >= 2 ? 'active' : ''}`}>
+              <div className="step-number">2</div>
+              <div className="step-label">Contact & Start Project</div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Main Form container (Hide during print) */}
       <section className="quote-page-body no-print">
-        {!isInvoiceGenerated ? (
-          <div className="quote-form-card">
-            {/* STEP 1: SELECT SERVICES */}
-            {step === 1 && (
-              <div className="quote-step-content">
-                <div className="quote-step-header">
-                  <h2>Select Services for Your Project</h2>
-                  <p>Choose one or more services. You can mix and match across categories.</p>
+        <div className="quote-form-card">
+          {/* STEP 1: FRICTIONLESS SEARCH & INSTANT BUNDLES */}
+          {step === 1 && (
+            <div className="quote-step-content">
+              <div className="quote-step-header">
+                <h2>Choose a Pre-made Combo or Build a Custom Package</h2>
+                <p>Select a pre-packaged combo below, or search and select individual services to design your own custom package with real-time pricing.</p>
+              </div>
+
+              {/* Search Bar Block */}
+              <div className="search-services-block">
+                <div className="quote-search-wrapper">
+                  <svg className="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search services (e.g. Next.js, Chatbot, Figma, WordPress)..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="quote-search-input"
+                  />
+                  {searchQuery && (
+                    <button onClick={() => setSearchQuery('')} className="search-clear-btn" aria-label="Clear Search">
+                      ✕
+                    </button>
+                  )}
                 </div>
 
-                <div className="quote-services-accordion">
-                  {CATEGORIES.map((category) => {
-                    const categoryServices = SERVICES.filter((s) => s.category === category.id);
-                    const isExpanded = !!expandedCategories[category.id];
+                {/* Suggestion Tags */}
+                <div className="suggestion-tags-row">
+                  <span className="suggestion-label">Popular searches:</span>
+                  <div className="suggestion-tags">
+                    {SUGGESTION_TAGS.map((tag) => (
+                      <button
+                        key={tag}
+                        onClick={() => setSearchQuery(tag)}
+                        className={`btn-suggestion-tag ${searchQuery === tag ? 'active' : ''}`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
+              {/* Pre-packaged Combos Section */}
+              <div className="combos-section">
+                <h3 className="column-section-title">Popular Pre-packaged Solutions (Save Extra)</h3>
+                <div className="combos-grid">
+                  {BUNDLES.map((bundle) => {
+                    const isAllSelected = bundle.serviceIds.every(id => selectedServices.includes(id));
+                    
                     return (
-                      <div key={category.id} className={`quote-category-item ${isExpanded ? 'expanded' : ''}`}>
-                        <button onClick={() => toggleCategory(category.id)} className="quote-category-header">
-                          <span className="quote-category-title">{category.name}</span>
-                          <span className="quote-category-chevron">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5">
-                              <polyline points="6 9 12 15 18 9" />
-                            </svg>
-                          </span>
-                        </button>
-
-                        <div className="quote-category-services-list-wrapper">
-                          <div className="quote-category-services-list">
-                            {categoryServices.map((service) => {
-                              const isChecked = selectedServices.includes(service.id);
-                              return (
-                                <label key={service.id} className={`quote-service-checkbox-card ${isChecked ? 'checked' : ''}`}>
-                                  <input
-                                    type="checkbox"
-                                    checked={isChecked}
-                                    onChange={() => handleServiceToggle(service.id)}
-                                    className="quote-checkbox-input"
-                                  />
-                                  <div className="quote-checkbox-custom">
-                                    {isChecked && (
-                                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3">
-                                        <polyline points="20 6 9 17 4 12" />
-                                      </svg>
-                                    )}
-                                  </div>
-                                  <div className="quote-service-info">
-                                    <div className="quote-service-name-row">
-                                      <span className="quote-service-name">{service.name}</span>
-                                      <span className="quote-service-price">
-                                        {formatPrice(service.basePricePKR, selectedCurrency)}
-                                      </span>
-                                    </div>
-                                    <p className="quote-service-desc">{service.description}</p>
-                                  </div>
-                                </label>
-                              );
-                            })}
-                          </div>
+                      <div key={bundle.id} className={`combo-card-item ${isAllSelected ? 'active' : ''}`}>
+                        <div className="combo-card-header">
+                          <span className="combo-badge-save">Save {formatPrice(bundle.discountPKR, selectedCurrency)}</span>
+                          <h4>{bundle.name}</h4>
+                        </div>
+                        <p className="combo-card-desc">{bundle.description}</p>
+                        
+                        <div className="combo-card-included-tags">
+                          {bundle.serviceIds.map(id => {
+                            const srv = SERVICES.find(s => s.id === id);
+                            return srv ? <span key={id} className="combo-item-tag">{srv.name}</span> : null;
+                          })}
+                        </div>
+                        
+                        <div className="combo-card-footer">
+                          {isAllSelected ? (
+                            <button className="btn-apply-combo active" disabled>
+                              Package Applied ✓
+                            </button>
+                          ) : (
+                            <button 
+                              onClick={() => handleApplyBundle(bundle)} 
+                              className="btn-apply-combo"
+                            >
+                              Apply Package
+                            </button>
+                          )}
                         </div>
                       </div>
                     );
                   })}
                 </div>
               </div>
-            )}
 
-            {/* STEP 2: PROJECT DETAILS */}
-            {step === 2 && (
-              <div className="quote-step-content">
-                <div className="quote-step-header">
-                  <h2>Project & Contact Details</h2>
-                  <p>Provide contact information and describe the project specifications to customize your estimate.</p>
-                </div>
+              {/* Flex Grid: Search Results on Left, Selected Services Cart on Right */}
+              <div className="quote-step-columns">
+                {/* Left Column: Search Results */}
+                <div className="quote-search-results-column">
+                  <h3 className="column-section-title">
+                    {searchQuery.trim() ? `Search Results (${searchResults.length})` : 'Add Services to Custom Package'}
+                  </h3>
 
-                <div className="quote-form-grid">
-                  <div className="quote-form-field">
-                    <label htmlFor="client-name">Full Name <span className="required">*</span></label>
-                    <input
-                      id="client-name"
-                      type="text"
-                      placeholder="e.g. John Doe"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className={formErrors.name ? 'input-error' : ''}
-                    />
-                    {formErrors.name && <span className="error-msg">{formErrors.name}</span>}
-                  </div>
+                  <div className="services-results-list">
+                    {/* Show search results if searching */}
+                    {searchQuery.trim() && searchResults.map((service) => {
+                      const isSelected = selectedServices.includes(service.id);
+                      return (
+                        <div key={service.id} className={`quote-search-card ${isSelected ? 'selected' : ''}`}>
+                          <div className="search-card-header">
+                            <span className="search-card-category">{service.category.replace('-', ' ')}</span>
+                            <span className="search-card-price">{formatPrice(service.basePricePKR, selectedCurrency)}</span>
+                          </div>
+                          <h4 className="search-card-name">{service.name}</h4>
+                          <p className="search-card-desc">{service.description}</p>
+                          <div className="search-card-action">
+                            {isSelected ? (
+                              <button 
+                                onClick={() => handleRemoveService(service.id)} 
+                                className="btn-result-action selected"
+                              >
+                                Selected ✓
+                              </button>
+                            ) : (
+                              <button 
+                                onClick={() => handleAddService(service.id)} 
+                                className="btn-result-action add"
+                              >
+                                + Add to Quote
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
 
-                  <div className="quote-form-field">
-                    <label htmlFor="client-email">Email Address <span className="required">*</span></label>
-                    <input
-                      id="client-email"
-                      type="email"
-                      placeholder="e.g. john@company.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className={formErrors.email ? 'input-error' : ''}
-                    />
-                    {formErrors.email && <span className="error-msg">{formErrors.email}</span>}
-                  </div>
+                    {/* Show fallback popular services if not searching */}
+                    {!searchQuery.trim() && popularServices.map((service) => {
+                      const isSelected = selectedServices.includes(service.id);
+                      return (
+                        <div key={service.id} className={`quote-search-card ${isSelected ? 'selected' : ''}`}>
+                          <div className="search-card-header">
+                            <span className="search-card-category">{service.category.replace('-', ' ')}</span>
+                            <span className="search-card-price">{formatPrice(service.basePricePKR, selectedCurrency)}</span>
+                          </div>
+                          <h4 className="search-card-name">{service.name}</h4>
+                          <p className="search-card-desc">{service.description}</p>
+                          <div className="search-card-action">
+                            {isSelected ? (
+                              <button 
+                                onClick={() => handleRemoveService(service.id)} 
+                                className="btn-result-action selected"
+                              >
+                                Selected ✓
+                              </button>
+                            ) : (
+                              <button 
+                                onClick={() => handleAddService(service.id)} 
+                                className="btn-result-action add"
+                              >
+                                + Add to Quote
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
 
-                  <div className="quote-form-field">
-                    <label htmlFor="client-company">Company Name (Optional)</label>
-                    <input
-                      id="client-company"
-                      type="text"
-                      placeholder="e.g. Acme Corporation"
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    />
-                  </div>
-
-                  <div className="quote-form-field">
-                    <label htmlFor="project-name">Project Name <span className="required">*</span></label>
-                    <input
-                      id="project-name"
-                      type="text"
-                      placeholder="e.g. E-Commerce Rebrand or Custom Mobile App"
-                      value={formData.projectName}
-                      onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
-                      className={formErrors.projectName ? 'input-error' : ''}
-                    />
-                    {formErrors.projectName && <span className="error-msg">{formErrors.projectName}</span>}
-                  </div>
-
-                  <div className="quote-form-field">
-                    <label htmlFor="project-timeline">Desired Timeline</label>
-                    <select
-                      id="project-timeline"
-                      value={formData.timeline}
-                      onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                    >
-                      <option value="2-weeks">Express (2 Weeks)</option>
-                      <option value="1-month">Standard (1 Month)</option>
-                      <option value="2-months">Medium (2 Months)</option>
-                      <option value="3-months">Long-Term (3+ Months)</option>
-                    </select>
-                  </div>
-
-                  <div className="quote-form-field">
-                    <label htmlFor="project-tech">Preferred Tech Stack (Optional)</label>
-                    <input
-                      id="project-tech"
-                      type="text"
-                      placeholder="e.g. Next.js, FastAPI, Node.js, WordPress"
-                      value={formData.techStack}
-                      onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
-                    />
-                  </div>
-
-                  <div className="quote-form-field full-width">
-                    <label htmlFor="project-desc">Project Description & Requirements <span className="required">*</span></label>
-                    <textarea
-                      id="project-desc"
-                      rows={5}
-                      placeholder="Describe the scope, functionalities, user roles, design style and integrations needed..."
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      className={formErrors.description ? 'input-error' : ''}
-                    ></textarea>
-                    {formErrors.description && <span className="error-msg">{formErrors.description}</span>}
+                    {/* Empty Search State */}
+                    {searchQuery.trim() && searchResults.length === 0 && (
+                      <div className="search-results-empty">
+                        <p>No matches found for "{searchQuery}".</p>
+                        <p className="hint">Try searching for broader keywords like "Web", "AI", or "SEO".</p>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* STEP 3: REVIEW & INVOICE GENERATOR */}
-            {step === 3 && (
-              <div className="quote-step-content">
-                <div className="quote-step-header">
-                  <h2>Review Custom Scope & Estimate</h2>
-                  <p>Check selected services and set your preferred currency before generating the printable sheet.</p>
-                </div>
+                {/* Right Column: Selected Services (Instant Quote Summary) */}
+                <div className="quote-selection-column">
+                  <h3 className="column-section-title">Your Custom Package</h3>
+                  
+                  <div className="selection-cart-box">
+                    <div className="selection-cart-header">
+                      <span className="selected-count">{selectedServices.length} Selected</span>
+                      <select 
+                        value={selectedCurrency.code} 
+                        onChange={handleCurrencyChange}
+                        className="cart-currency-dropdown"
+                      >
+                        {CURRENCIES.map(curr => (
+                          <option key={curr.code} value={curr.code}>{curr.code}</option>
+                        ))}
+                      </select>
+                    </div>
 
-                <div className="quote-review-container">
-                  <div className="quote-currency-selector-card">
-                    <label htmlFor="currency-select">Choose Preferred Invoice Currency:</label>
-                    <select
-                      id="currency-select"
-                      value={selectedCurrency.code}
-                      onChange={handleCurrencyChange}
-                      className="currency-select-dropdown"
-                    >
-                      {CURRENCIES.map((curr) => (
-                        <option key={curr.code} value={curr.code}>
-                          {curr.code} ({curr.symbol})
-                        </option>
-                      ))}
-                    </select>
-                    <p className="currency-conversion-helper">
-                      Estimates will be recalculated instantly using fixed conversion multipliers.
-                    </p>
-                  </div>
-
-                  <div className="quote-review-summary-table-wrapper">
-                    <table className="quote-review-summary-table">
-                      <thead>
-                        <tr>
-                          <th>Service Item</th>
-                          <th>Category</th>
-                          <th className="align-right">Base Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {selectedServices.map((serviceId) => {
+                    <div className="selection-cart-items">
+                      {selectedServices.length > 0 ? (
+                        selectedServices.map((serviceId) => {
                           const service = SERVICES.find((s) => s.id === serviceId);
                           if (!service) return null;
                           return (
-                            <tr key={service.id}>
-                              <td>
-                                <span className="summary-service-name">{service.name}</span>
-                                <p className="summary-service-desc">{service.description}</p>
-                              </td>
-                              <td>
-                                <span className="summary-category-badge">{service.category}</span>
-                              </td>
-                              <td className="align-right amount-cell">
-                                {formatPrice(service.basePricePKR, selectedCurrency)}
-                              </td>
-                            </tr>
+                            <div key={service.id} className="cart-item-row">
+                              <div className="cart-item-info">
+                                <span className="cart-item-name">{service.name}</span>
+                                <span className="cart-item-price">{formatPrice(service.basePricePKR, selectedCurrency)}</span>
+                              </div>
+                              <button 
+                                onClick={() => handleRemoveService(service.id)} 
+                                className="btn-remove-cart-item"
+                                aria-label="Remove Service"
+                              >
+                                ✕
+                              </button>
+                            </div>
                           );
-                        })}
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <td colSpan={2}>Subtotal</td>
-                          <td className="align-right">{formatPrice(totalPKR, selectedCurrency)}</td>
-                        </tr>
-                        <tr className="tfoot-total">
-                          <td colSpan={2}>Estimated Grand Total</td>
-                          <td className="align-right">{formatPrice(totalPKR, selectedCurrency)}</td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>
+                        })
+                      ) : (
+                        <div className="cart-empty-message">
+                          <p>Your quote is empty.</p>
+                          <p className="hint">Select a combo package above or search services to start.</p>
+                        </div>
+                      )}
+                    </div>
 
-                  <div className="generate-invoice-prompt">
-                    <button onClick={handleGenerateInvoice} className="btn-generate-invoice-primary">
-                      Generate Printable Invoice / Estimate
-                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                        <line x1="16" y1="13" x2="8" y2="13" />
-                        <line x1="16" y1="17" x2="8" y2="17" />
-                        <polyline points="10 9 9 9 8 9" />
-                      </svg>
-                    </button>
+                    <div className="selection-cart-totals">
+                      {selectedServices.length > 0 && (
+                        <>
+                          <div className="cart-totals-row">
+                            <span>Subtotal:</span>
+                            <span>{formatPrice(totalPKR, selectedCurrency)}</span>
+                          </div>
+                          {totalDiscountPKR > 0 && (
+                            <div className="cart-totals-row discount-row">
+                              <span className="green-text">Package Discount:</span>
+                              <span className="green-text">-{formatPrice(totalDiscountPKR, selectedCurrency)}</span>
+                            </div>
+                          )}
+                        </>
+                      )}
+                      
+                      <div className="cart-totals-row font-large bold">
+                        <span>Grand Total:</span>
+                        <span className="gold-text">{formatPrice(grandTotalPKR, selectedCurrency)}</span>
+                      </div>
+                      
+                      <button 
+                        onClick={handleNextStep} 
+                        disabled={selectedServices.length === 0}
+                        className="btn-cart-proceed-checkout"
+                      >
+                        Proceed to Contact Team →
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Stepper Buttons (Hide when invoice is open) */}
-            <div className="quote-stepper-actions">
-              {step > 1 && (
-                <button onClick={handlePrevStep} className="btn-stepper-back">
-                  ← Back
-                </button>
+          {/* STEP 2: OPTIONAL CONTACT / SUBMISSION */}
+          {step === 2 && (
+            <div className="quote-step-content">
+              <div className="quote-step-header">
+                <h2>Submit Your Quote Request</h2>
+                <p>Complete this optional step to send your selected project scope directly to the Bina Codes engineering team.</p>
+              </div>
+
+              {!isSubmitted ? (
+                <div className="quote-submission-layout">
+                  {/* Left Side: Contact Form */}
+                  <form onSubmit={handleSubmitQuote} className="quote-contact-form">
+                    <div className="quote-form-grid">
+                      <div className="quote-form-field">
+                        <label htmlFor="client-name">Full Name <span className="required">*</span></label>
+                        <input
+                          id="client-name"
+                          type="text"
+                          placeholder="Your name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className={formErrors.name ? 'input-error' : ''}
+                        />
+                        {formErrors.name && <span className="error-msg">{formErrors.name}</span>}
+                      </div>
+
+                      <div className="quote-form-field">
+                        <label htmlFor="client-email">Email Address <span className="required">*</span></label>
+                        <input
+                          id="client-email"
+                          type="email"
+                          placeholder="john@company.com"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className={formErrors.email ? 'input-error' : ''}
+                        />
+                        {formErrors.email && <span className="error-msg">{formErrors.email}</span>}
+                      </div>
+
+                      <div className="quote-form-field full-width">
+                        <label htmlFor="client-company">Company Name (Optional)</label>
+                        <input
+                          id="client-company"
+                          type="text"
+                          placeholder="Acme Corporation"
+                          value={formData.company}
+                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="quote-form-field full-width">
+                        <label htmlFor="project-desc">Additional Notes & Custom Requirements (Optional)</label>
+                        <textarea
+                          id="project-desc"
+                          rows={4}
+                          placeholder="Tell us more details about your timeline, tech preference, design expectations, etc..."
+                          value={formData.description}
+                          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <div className="form-submit-actions">
+                      <button type="submit" className="btn-submit-quote-request">
+                        Email Quote to Bina Codes
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="22" y1="2" x2="11" y2="13" />
+                          <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+
+                  {/* Right Side: Scope Breakdown Review */}
+                  <div className="quote-cart-review-sidebar">
+                    <h3 className="sidebar-title">Scope Review</h3>
+                    <div className="sidebar-specs">
+                      <div className="spec-row">
+                        <span className="spec-lbl">Reference ID:</span>
+                        <span className="spec-val">{invoiceNumber}</span>
+                      </div>
+                      <div className="spec-row">
+                        <span className="spec-lbl">Selected items:</span>
+                        <span className="spec-val">{selectedServices.length} Package(s)</span>
+                      </div>
+                      {activeBundles.length > 0 && (
+                        <div className="spec-row">
+                          <span className="spec-lbl">Applied Package:</span>
+                          <span className="spec-val green-text">{activeBundles[0].name}</span>
+                        </div>
+                      )}
+                      
+                      <div className="spec-row">
+                        <span className="spec-lbl">Subtotal:</span>
+                        <span className="spec-val">{formatPrice(totalPKR, selectedCurrency)}</span>
+                      </div>
+
+                      {totalDiscountPKR > 0 && (
+                        <div className="spec-row">
+                          <span className="spec-lbl green-text">Package Discount:</span>
+                          <span className="spec-val green-text">-{formatPrice(totalDiscountPKR, selectedCurrency)}</span>
+                        </div>
+                      )}
+
+                      <div className="spec-row total-row">
+                        <span className="spec-lbl">Total Estimate:</span>
+                        <span className="spec-val gold-text">{formatPrice(grandTotalPKR, selectedCurrency)}</span>
+                      </div>
+                    </div>
+
+                    <div className="sidebar-items-scroller">
+                      {selectedServices.map(id => {
+                        const s = SERVICES.find(srv => srv.id === id);
+                        if (!s) return null;
+                        return (
+                          <div key={s.id} className="sidebar-item-card">
+                            <span className="name">{s.name}</span>
+                            <span className="price">{formatPrice(s.basePricePKR, selectedCurrency)}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <button 
+                      onClick={() => setShowPrintableInvoice(!showPrintableInvoice)} 
+                      className="btn-sidebar-toggle-sheet"
+                    >
+                      {showPrintableInvoice ? 'Hide Details Sheet' : 'Show Detailed Invoice Sheet'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="quote-success-view">
+                  <div className="success-icon-badge">✓</div>
+                  <h3>Quote Request Compiled!</h3>
+                  <p>
+                    We've opened your local email client with the pre-formatted quote details (Reference ID: <span className="bold">{invoiceNumber}</span>). 
+                    If it didn't open automatically, you can copy the summary details and email them to <span className="bold">hello@binacodes.com</span>.
+                  </p>
+                  <div className="success-nav-buttons">
+                    <button onClick={handlePrevStep} className="btn-modify-quote">
+                      ← Back to Builder
+                    </button>
+                    <a href="/" className="btn-return-home-cta">
+                      Return to Homepage
+                    </a>
+                  </div>
+                </div>
               )}
-              {step < 3 ? (
-                <button onClick={handleNextStep} className="btn-stepper-next">
-                  Next Step →
-                </button>
-              ) : null}
             </div>
-          </div>
-        ) : (
-          <div className="invoice-success-hero">
-            <div className="success-checkmark">✓</div>
-            <h2>Your Invoice / Estimate has been Generated!</h2>
-            <p>Scroll down to preview, print or download the document as PDF. You can also modify details if needed.</p>
-            <div className="success-action-buttons">
-              <button onClick={handlePrevStep} className="btn-modify-quote">
-                ← Modify Selection
+          )}
+
+          {/* Stepper navigation buttons */}
+          <div className="quote-stepper-actions">
+            {step > 1 && (
+              <button onClick={handlePrevStep} className="btn-stepper-back">
+                ← Back to Service Selector
               </button>
-              <button 
-                onClick={() => window.print()} 
-                className="btn-print-quote"
-              >
-                Print / Download PDF
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="6 9 6 2 18 2 18 9" />
-                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                  <rect x="6" y="14" width="12" height="8" />
-                </svg>
-              </button>
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </section>
 
-      {/* RENDER INVOICE COMPONENT (Always rendered, but styled via print query/visibility) */}
-      {isInvoiceGenerated && (
-        <Invoice
-          invoiceNumber={invoiceNumber}
-          clientData={{
-            name: formData.name,
-            email: formData.email,
-            company: formData.company,
-            projectName: formData.projectName,
-            description: formData.description,
-            timeline: formData.timeline,
-            techStack: formData.techStack,
-          }}
-          selectedServiceIds={selectedServices}
-          currency={selectedCurrency}
-        />
-      )}
-
-      {/* Floating Sticky Footer price counter (only visible in Step 1, hidden when print) */}
-      {step === 1 && selectedServices.length > 0 && (
-        <div className="quote-floating-price-bar no-print">
-          <div className="price-bar-content">
-            <div className="price-bar-info">
-              <span className="price-bar-count">{selectedServices.length} Service(s) Selected</span>
-              <span className="price-bar-total">{formatPrice(totalPKR, selectedCurrency)}</span>
-            </div>
-            <button onClick={handleNextStep} className="btn-price-bar-proceed">
-              Configure Details →
+      {/* RENDER PRINTABLE INVOICE SHEET (rendered only if toggled and on Step 2) */}
+      {step === 2 && showPrintableInvoice && (
+        <div className="printable-invoice-container-wrapper">
+          <div className="invoice-preview-bar no-print">
+            <h3>Invoice Sheet Preview</h3>
+            <button onClick={() => window.print()} className="btn-print-invoice-preview">
+              Print / Save PDF
             </button>
           </div>
+          <Invoice
+            invoiceNumber={invoiceNumber}
+            clientData={{
+              name: formData.name || 'Valued Client',
+              email: formData.email || 'client@company.com',
+              company: formData.company,
+              projectName: 'Custom Digital Development',
+              description: formData.description || 'Custom Scope Build',
+              timeline: '1-month',
+              techStack: '',
+            }}
+            selectedServiceIds={selectedServices}
+            currency={selectedCurrency}
+          />
         </div>
       )}
     </div>
