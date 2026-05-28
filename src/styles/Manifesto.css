@@ -1,0 +1,95 @@
+.manifesto-section {
+  position: relative;
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f7f5f0 0%, #ece6dc 50%, #f7f5f0 100%);
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+.manifesto-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.manifesto-particle {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(249, 154, 60, 0.5) 0%, rgba(249, 154, 60, 0) 70%);
+  animation: particleFloat linear infinite;
+  opacity: 0.4;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-110vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.manifesto-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+.manifesto-line {
+  font-family: 'Caveat Brush', cursive;
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: var(--color-brand-primary);
+  text-align: center;
+  line-height: 1.1;
+  text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.85), 4px 4px 12px rgba(78, 47, 29, 0.1);
+  will-change: transform, opacity;
+}
+
+.manifesto-line:nth-child(2) {
+  color: var(--color-accent-gold);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+}
+
+.manifesto-line:nth-child(5) {
+  color: var(--color-brand-dark);
+}
+
+@media (max-width: 768px) {
+  .manifesto-section {
+    min-height: 60vh;
+    padding: 3rem 0;
+  }
+  
+  .manifesto-content {
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .manifesto-line {
+    font-size: clamp(1.6rem, 7vw, 2.5rem);
+  }
+  
+  .manifesto-line:nth-child(2) {
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+}

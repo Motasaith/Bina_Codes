@@ -1,0 +1,227 @@
+/* ===================================================
+   TECH STACK — Desert Dust Crumble Theme
+   Icons-only grid. Click to crumble to sand particles.
+   Hover reveals tooltip. Scroll out = dust fade.
+   =================================================== */
+
+.techstack-section {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  background: linear-gradient(180deg, #f7f5f0 0%, #ece6dc 50%, #f7f5f0 100%);
+  padding: 4rem 0 5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.techstack-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 0 2rem;
+}
+
+.techstack-tag {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(78, 47, 29, 0.15);
+  border-radius: var(--radius-full);
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-brand-primary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 1rem;
+}
+
+.techstack-title {
+  font-family: 'Caveat Brush', cursive;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: var(--color-brand-primary);
+  line-height: 1;
+  text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.85), 4px 4px 12px rgba(78, 47, 29, 0.15);
+}
+
+.techstack-subtitle {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  color: var(--color-text-muted-dark);
+  margin-top: 0.75rem;
+  opacity: 0.7;
+}
+
+/* ---- ICON GRID ---- */
+.techstack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 520px;
+  width: 100%;
+  padding: 0 2rem;
+  position: relative;
+}
+
+/* ---- TECH CARD ---- */
+.tech-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(78, 47, 29, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  overflow: visible;
+}
+
+.tech-card:hover {
+  transform: translateY(-6px) scale(1.05);
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 12px 30px rgba(78, 47, 29, 0.12);
+  border-color: rgba(249, 154, 60, 0.3);
+}
+
+.tech-card-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+}
+
+.tech-card-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  transition: transform 0.3s ease;
+}
+
+.tech-card:hover .tech-card-icon {
+  transform: scale(1.15);
+}
+
+/* ---- DUST CRUMBLE STATE ---- */
+.tech-card.dusted .tech-card-inner {
+  opacity: 0;
+  transform: scale(0.3);
+  filter: blur(6px);
+}
+
+.tech-card.dusted {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* ---- DUST PARTICLES ---- */
+.dust-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dust-particle {
+  position: absolute;
+  width: var(--size, 3px);
+  height: var(--size, 3px);
+  border-radius: 50%;
+  background: radial-gradient(circle, #d4a574 0%, #c49a6c 40%, transparent 70%);
+  opacity: 0;
+  transform: translate(0, 0) scale(1);
+}
+
+/* Burst on click */
+.tech-card.dusted .dust-particle {
+  animation: dustBurst 0.9s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes dustBurst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    opacity: 0.9;
+    transform: translate(var(--dx), var(--dy)) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--dx) * 1.4), calc(var(--dy) * 1.4 + 20px)) scale(0.2);
+  }
+}
+
+/* Ambient sand drift when hovering (subtle) */
+.tech-card:hover .dust-particle {
+  animation: sandDrift 2s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  opacity: 0.5;
+}
+
+@keyframes sandDrift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(calc(var(--dx) * 0.15), calc(var(--dy) * 0.15 - 4px)) scale(0.7);
+    opacity: 0.6;
+  }
+}
+
+/* ---- TOOLTIP ---- */
+.tech-card-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  padding: 0.4rem 0.9rem;
+  background: var(--color-brand-primary);
+  color: #fff;
+  border-radius: var(--radius-md);
+  font-family: var(--font-accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 14px rgba(78, 47, 29, 0.25);
+}
+
+.tech-card-tooltip.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tech-card-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--color-brand-primary);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 576px) {
+  .techstack-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .tech-card-icon {
+    font-size: 1.8rem;
+  }
+}
