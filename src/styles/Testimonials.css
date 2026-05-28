@@ -1,7 +1,7 @@
 .testimonials-section {
   position: relative;
   width: 100%;
-  min-height: 70vh;
+  min-height: 100vh;
   background: linear-gradient(180deg, var(--color-bg-base) 0%, #ece6dc 100%);
   padding: 4rem 0;
   overflow: hidden;

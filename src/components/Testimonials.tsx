@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../styles/Testimonials.css';
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const testimonialsData = [
   {
@@ -35,63 +39,70 @@ export default function Testimonials() {
     const cards = cardsRef.current;
     if (!section || !cards) return;
 
-    // Skip the card-dealt animation on mobile — let CSS handle the stacked layout
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) return;
-
     const cardEls = cards.querySelectorAll('.testimonial-card');
+    const mm = gsap.matchMedia();
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 50%',
-        end: '+=100%',
-        pin: true,
-        scrub: 1,
-      },
-    });
+    // Only run pinned cards deal-out animation on screen sizes larger than mobile (768px)
+    mm.add({
+      isDesktop: "(min-width: 1200px)",
+      isTablet: "(min-width: 769px) and (max-width: 1199px)",
+    }, (context) => {
+      const { isDesktop } = context.conditions as any;
+      // Adjust translation spacing dynamically to fit smaller desktop screens perfectly
+      const xOffset = isDesktop ? '118%' : '98%';
 
-    // Cards start stacked
-    gsap.set(cardEls, {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      xPercent: -50,
-      yPercent: -50,
-    });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=100%',
+          pin: true,
+          scrub: 1,
+        },
+      });
 
-    // Deal out animation
-    tl.to(cardEls[0], {
-      x: '-120%',
-      rotation: -5,
-      duration: 1,
-      ease: 'power2.out',
-    });
+      // Cards start stacked in the center
+      gsap.set(cardEls, {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        xPercent: -50,
+        yPercent: -50,
+      });
 
-    tl.to(
-      cardEls[1],
-      {
-        x: '0%',
-        rotation: 0,
+      // Deal out animation
+      tl.to(cardEls[0], {
+        x: `-${xOffset}`,
+        rotation: -5,
         duration: 1,
         ease: 'power2.out',
-      },
-      0.3
-    );
+      });
 
-    tl.to(
-      cardEls[2],
-      {
-        x: '120%',
-        rotation: 5,
-        duration: 1,
-        ease: 'power2.out',
-      },
-      0.6
-    );
+      tl.to(
+        cardEls[1],
+        {
+          x: '0%',
+          rotation: 0,
+          duration: 1,
+          ease: 'power2.out',
+        },
+        0.3
+      );
+
+      tl.to(
+        cardEls[2],
+        {
+          x: xOffset,
+          rotation: 5,
+          duration: 1,
+          ease: 'power2.out',
+        },
+        0.6
+      );
+    });
 
     return () => {
-      tl.kill();
+      mm.revert();
     };
   }, []);
 
