@@ -57,7 +57,7 @@
 
 .manifesto-line {
   font-family: 'Caveat Brush', cursive;
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(1.75rem, 4.5vw, 3.25rem);
   color: var(--color-brand-primary);
   text-align: center;
   line-height: 1.1;
@@ -67,7 +67,7 @@
 
 .manifesto-line:nth-child(2) {
   color: var(--color-accent-gold);
-  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-size: clamp(2rem, 5vw, 4rem);
 }
 
 .manifesto-line:nth-child(5) {
@@ -100,11 +100,11 @@
   }
   
   .manifesto-line {
-    font-size: clamp(1.6rem, 7vw, 2.5rem);
+    font-size: clamp(1.4rem, 6vw, 2.25rem);
   }
-  
+
   .manifesto-line:nth-child(2) {
-    font-size: clamp(2rem, 9vw, 3rem);
+    font-size: clamp(1.75rem, 8vw, 2.75rem);
   }
 }
 
@@ -120,11 +120,11 @@
   }
 
   .manifesto-line {
-    font-size: clamp(1.4rem, 6.5vw, 2rem);
+    font-size: clamp(1.2rem, 6vw, 1.85rem);
   }
 
   .manifesto-line:nth-child(2) {
-    font-size: clamp(1.8rem, 8vw, 2.5rem);
+    font-size: clamp(1.5rem, 7vw, 2.25rem);
   }
 }
 
