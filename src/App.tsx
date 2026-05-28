@@ -6,7 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Manifesto from './components/Manifesto';
 import Services from './components/Services';
 import Process from './components/Process';
 import TechStack from './components/TechStack';
@@ -17,6 +16,7 @@ import Footer from './components/Footer';
 // Pages
 import ServicesPage from './pages/ServicesPage';
 import QuotePage from './pages/QuotePage';
+import AboutPage from './pages/AboutPage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -117,7 +117,6 @@ export default function App() {
           element={
             <main>
               <Hero />
-              <Manifesto />
               <Services />
               <Process />
               <TechStack />
@@ -126,6 +125,7 @@ export default function App() {
             </main>
           }
         />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/quote" element={<QuotePage />} />
       </Routes>

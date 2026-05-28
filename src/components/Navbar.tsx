@@ -68,7 +68,7 @@ export default function Navbar() {
       {/* Desktop Links */}
       <nav className="nav-links">
         <a href="#home" onClick={(e) => handleNavClick('home', e)} className="nav-link">Home</a>
-        <a href="#about" onClick={(e) => handleNavClick('about', e)} className="nav-link">About</a>
+        <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}>About</Link>
         <Link to="/services" className={`nav-link ${location.pathname === '/services' ? 'active' : ''}`}>Services</Link>
         <a href="#contact" onClick={(e) => handleNavClick('contact', e)} className="nav-link">Contact</a>
       </nav>
@@ -93,7 +93,7 @@ export default function Navbar() {
       <div className={`nav-menu-mobile ${isMenuOpen ? 'open' : ''}`}>
         <nav className="nav-links-mobile">
           <a href="#home" className="nav-link-mobile" onClick={(e) => handleNavClick('home', e)}>Home</a>
-          <a href="#about" className="nav-link-mobile" onClick={(e) => handleNavClick('about', e)}>About</a>
+          <Link to="/about" className={`nav-link-mobile ${location.pathname === '/about' ? 'active' : ''}`} onClick={handleLinkClick}>About</Link>
           <Link to="/services" className="nav-link-mobile" onClick={handleLinkClick}>Services</Link>
           <a href="#contact" className="nav-link-mobile" onClick={(e) => handleNavClick('contact', e)}>Contact</a>
         </nav>

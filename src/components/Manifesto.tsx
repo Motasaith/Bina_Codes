@@ -3,11 +3,11 @@ import { gsap } from 'gsap';
 import '../styles/Manifesto.css';
 
 const manifestoLines = [
-  'We don\'t just write code.',
-  'We engineer futures.',
-  'Every line is a promise.',
-  'Every deployment is a milestone.',
-  'We turn complexity into clarity.',
+  'Based in Rahim Yar Khan.',
+  'South Punjab\'s premier software house.',
+  'We build high-performance digital systems.',
+  'We teach modern, high-income skills.',
+  'Empowering local youth to lead globally.',
 ];
 
 export default function Manifesto() {

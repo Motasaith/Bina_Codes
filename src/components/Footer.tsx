@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import '../styles/Footer.css';
 
@@ -135,9 +136,9 @@ export default function Footer() {
           <div className="footer-column">
             <h4 className="footer-column-title">Company</h4>
             <ul className="footer-links">
-              <li><a href="#about" className="footer-link">About</a></li>
-              <li><a href="#services" className="footer-link">Services</a></li>
-              <li><a href="#contact" className="footer-link">Careers</a></li>
+              <li><Link to="/about" className="footer-link">About & Team</Link></li>
+              <li><Link to="/services" className="footer-link">Services</Link></li>
+              <li><Link to="/#contact" className="footer-link">Careers</Link></li>
               <li><a href="#" className="footer-link">Blog</a></li>
             </ul>
           </div>
@@ -145,10 +146,10 @@ export default function Footer() {
           <div className="footer-column">
             <h4 className="footer-column-title">Services</h4>
             <ul className="footer-links">
-              <li><a href="#services" className="footer-link">Custom Software</a></li>
-              <li><a href="#services" className="footer-link">Web Apps</a></li>
-              <li><a href="#services" className="footer-link">Mobile Development</a></li>
-              <li><a href="#services" className="footer-link">Cloud & DevOps</a></li>
+              <li><Link to="/services?category=full-stack" className="footer-link">Custom Software</Link></li>
+              <li><Link to="/services?category=full-stack" className="footer-link">Web Apps</Link></li>
+              <li><Link to="/services?category=full-stack" className="footer-link">Mobile Apps</Link></li>
+              <li><Link to="/services?category=cloud-devops" className="footer-link">Cloud & DevOps</Link></li>
             </ul>
           </div>
 
