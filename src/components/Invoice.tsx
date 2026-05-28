@@ -65,9 +65,9 @@ export default function Invoice({
           <p className="invoice-brand-tagline">Engineering Digital Futures</p>
           <div className="invoice-company-details">
             <p>Bina Codes Studio</p>
-            <p>DHA Phase 6, Lahore, Pakistan</p>
-            <p>hello@binacodes.com | www.binacodes.com</p>
-            <p>+92 300 1234567</p>
+            <p>Rahim Yar Khan, Punjab, Pakistan</p>
+            <p>binacodex@gmail.com | www.binacodes.com</p>
+            <p>+92 336-3855120</p>
           </div>
         </div>
 

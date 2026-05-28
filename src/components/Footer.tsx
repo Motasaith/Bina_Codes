@@ -153,12 +153,17 @@ export default function Footer() {
           </div>
 
           <div className="footer-column">
-            <h4 className="footer-column-title">Resources</h4>
+            <h4 className="footer-column-title">Contact</h4>
             <ul className="footer-links">
-              <li><a href="#" className="footer-link">Documentation</a></li>
-              <li><a href="#" className="footer-link">Case Studies</a></li>
-              <li><a href="#" className="footer-link">Open Source</a></li>
-              <li><a href="#" className="footer-link">Support</a></li>
+              <li>
+                <a href="mailto:binacodex@gmail.com" className="footer-link">binacodex@gmail.com</a>
+              </li>
+              <li>
+                <a href="tel:+923363855120" className="footer-link">+92 336-3855120</a>
+              </li>
+              <li>
+                <span className="footer-contact-text">Rahim Yar Khan, Punjab, Pakistan</span>
+              </li>
             </ul>
           </div>
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SERVICES, CURRENCIES, BUNDLES, formatPrice } from '../data/services';
 import type { Bundle } from '../data/services';
-import Invoice from '../components/Invoice';
+import Invoice from '../components/Invoice.tsx';
 import '../styles/QuotePage.css';
 
 // Popular quick search suggestion tags
@@ -27,6 +27,95 @@ const POPULAR_SERVICE_IDS = [
   'design-seo'
 ];
 
+const FRONTEND_STACK_IDS = ['web-nextjs', 'web-vuejs', 'web-svelte'];
+const BACKEND_STACK_IDS = ['web-express', 'web-nestjs', 'web-fastapi'];
+const DATABASE_STACK_IDS = ['db-postgres', 'db-mongo', 'db-mysql', 'db-supabase'];
+
+const STACK_CONFIG = {
+  frontend: {
+    items: [
+      { id: 'web-nextjs', name: 'Next.js', desc: 'React, SEO & SSR ready' },
+      { id: 'web-vuejs', name: 'Vue/Nuxt', desc: 'Composition API, modular routing' },
+      { id: 'web-svelte', name: 'SvelteKit', desc: 'Ultra-fast compiler framework' },
+    ],
+  },
+  backend: {
+    items: [
+      { id: 'web-express', name: 'Node / Express', desc: 'Flexible, standard REST API' },
+      { id: 'web-nestjs', name: 'Node / NestJS', desc: 'Structured enterprise standard' },
+      { id: 'web-fastapi', name: 'Python / FastAPI', desc: 'High speed, ideal for AI apps' },
+    ],
+  },
+  database: {
+    items: [
+      { id: 'db-postgres', name: 'PostgreSQL', desc: 'Relational database architecture' },
+      { id: 'db-mongo', name: 'MongoDB', desc: 'Flexible NoSQL JSON documents' },
+      { id: 'db-mysql', name: 'MySQL', desc: 'Reliable SQL relational DB' },
+      { id: 'db-supabase', name: 'Supabase / Firebase', desc: 'Serverless real-time database' },
+    ],
+  },
+};
+
+const getTechIcon = (id: string) => {
+  switch (id) {
+    case 'web-nextjs':
+      return (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="4 17 10 11 4 5" />
+          <line x1="12" y1="19" x2="20" y2="19" />
+        </svg>
+      );
+    case 'web-vuejs':
+      return (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2L2 22h4l6-10 6 10h4L12 2z" />
+        </svg>
+      );
+    case 'web-svelte':
+      return (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.42 0 8-3.58 8-8s-3.58-8-8-8-8 3.58-8 8 3.58 8 8 8zm-2-12l5 4-5 4V8z" />
+        </svg>
+      );
+    case 'web-express':
+    case 'web-nestjs':
+      return (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+        </svg>
+      );
+    case 'web-fastapi':
+      return (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </svg>
+      );
+    case 'db-postgres':
+    case 'db-mysql':
+    case 'db-mongo':
+      return (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <ellipse cx="12" cy="5" rx="9" ry="3" />
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+          <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
+        </svg>
+      );
+    case 'db-supabase':
+      return (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </svg>
+      );
+    default:
+      return (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+        </svg>
+      );
+  }
+};
+
 export default function QuotePage() {
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
@@ -44,7 +133,7 @@ export default function QuotePage() {
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [showPrintableInvoice, setShowPrintableInvoice] = useState(false);
+  const [showPrintableInvoice, setShowPrintableInvoice] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Auto-select service from URL parameter
@@ -77,6 +166,24 @@ export default function QuotePage() {
     setSelectedServices(bundle.serviceIds);
   };
 
+  const handleSelectStackItem = (tier: 'frontend' | 'backend' | 'database', serviceId: string) => {
+    const tierIds =
+      tier === 'frontend' ? FRONTEND_STACK_IDS :
+      tier === 'backend' ? BACKEND_STACK_IDS :
+      DATABASE_STACK_IDS;
+
+    const isCurrentlySelected = selectedServices.includes(serviceId);
+
+    // Remove any currently selected IDs for this tier
+    const filtered = selectedServices.filter((id) => !tierIds.includes(id));
+
+    if (isCurrentlySelected) {
+      setSelectedServices(filtered);
+    } else {
+      setSelectedServices([...filtered, serviceId]);
+    }
+  };
+
   // Calculate current total in PKR
   const totalPKR = selectedServices.reduce((sum, serviceId) => {
     const service = SERVICES.find((s) => s.id === serviceId);
@@ -91,6 +198,16 @@ export default function QuotePage() {
   // Calculate bundle discounts
   const totalDiscountPKR = activeBundles.reduce((sum, bundle) => sum + bundle.discountPKR, 0);
   const grandTotalPKR = Math.max(0, totalPKR - totalDiscountPKR);
+
+  // Extract custom stack technologies selected by user
+  const selectedFrontend = SERVICES.find(s => FRONTEND_STACK_IDS.includes(s.id) && selectedServices.includes(s.id))
+    ?.name.replace(' Frontend Development', '').replace(' / Nuxt Frontend Development', '').replace(' / SvelteKit Frontend Development', '');
+  const selectedBackend = SERVICES.find(s => BACKEND_STACK_IDS.includes(s.id) && selectedServices.includes(s.id))
+    ?.name.replace(' Backend API Development', '').replace(' Backend API', '').replace(' / Python Backend', '');
+  const selectedDatabase = SERVICES.find(s => DATABASE_STACK_IDS.includes(s.id) && selectedServices.includes(s.id))
+    ?.name.replace(' Database Setup', '').replace(' / Firebase Integration', '');
+
+  const compiledTechStack = [selectedFrontend, selectedBackend, selectedDatabase].filter(Boolean).join(' + ') || (selectedServices.includes('web-mern') ? 'MERN Stack' : '');
 
   // Filter services based on search query
   const searchResults = SERVICES.filter((service) => {
@@ -126,6 +243,7 @@ export default function QuotePage() {
         return;
       }
       setStep(2);
+      setShowPrintableInvoice(true);
       window.scrollTo(0, 0);
     }
   };
@@ -134,7 +252,7 @@ export default function QuotePage() {
     if (step > 1) {
       setStep(1);
       setIsSubmitted(false);
-      setShowPrintableInvoice(false);
+      setShowPrintableInvoice(true);
       window.scrollTo(0, 0);
     }
   };
@@ -166,9 +284,9 @@ export default function QuotePage() {
 
       // Open mailto link
       const emailSubject = `Project Quote Request: ${invoiceNumber}`;
-      const emailBody = `Hi Bina Codes Team,%0D%0A%0D%0AI built a custom project scope on your quote builder and would like to connect.%0D%0A%0D%0A--- CLIENT DETAILS ---%0D%0AName: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0ACompany: ${formData.company || 'N/A'}%0D%0A%0D%0A--- ESTIMATE SUMMARY ---%0D%0AReference ID: ${invoiceNumber}%0D%0ASelected Services:%0D%0A${servicesText}%0D%0A%0D%0A${bundlesText}Subtotal: ${formatPrice(totalPKR, selectedCurrency)}%0D%0ABundle Discount: -${formatPrice(totalDiscountPKR, selectedCurrency)}%0D%0AEstimated Grand Total: ${formatPrice(grandTotalPKR, selectedCurrency)}%0D%0A%0D%0AAdditional Notes: ${formData.description || 'None'}%0D%0A%0D%0APlease schedule a kickoff call with me.%0D%0A%0D%0AThanks,%0D%0A${formData.name}`;
+      const emailBody = `Hi Bina Codes Team,%0D%0A%0D%0AI built a custom project scope on your quote builder and would like to connect.%0D%0A%0D%0A--- CLIENT DETAILS ---%0D%0AName: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0ACompany: ${formData.company || 'N/A'}%0D%0A%0D%0A--- ESTIMATE SUMMARY ---%0D%0AReference ID: ${invoiceNumber}%0D%0APreferred Stack: ${compiledTechStack || 'Not Specified'}%0D%0A%0D%0ASelected Services:%0D%0A${servicesText}%0D%0A%0D%0A${bundlesText}Subtotal: ${formatPrice(totalPKR, selectedCurrency)}%0D%0ABundle Discount: -${formatPrice(totalDiscountPKR, selectedCurrency)}%0D%0AEstimated Grand Total: ${formatPrice(grandTotalPKR, selectedCurrency)}%0D%0A%0D%0AAdditional Notes: ${formData.description || 'None'}%0D%0A%0D%0APlease schedule a kickoff call with me.%0D%0A%0D%0AThanks,%0D%0A${formData.name}`;
       
-      window.location.href = `mailto:hello@binacodes.com?subject=${emailSubject}&body=${emailBody}`;
+      window.location.href = `mailto:binacodex@gmail.com?subject=${emailSubject}&body=${emailBody}`;
     }
   };
 
@@ -288,6 +406,125 @@ export default function QuotePage() {
                       </div>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* Custom Tech Stack Configurator */}
+              <div className="stack-builder-section">
+                <h3 className="column-section-title">🛠️ Build Your Custom Tech Stack</h3>
+                <p className="stack-builder-subtitle">
+                  Choose your preferred frontend, backend, and database technologies to assemble your own stack in real-time.
+                </p>
+                
+                <div className="stack-builder-grid">
+                  {/* Frontend Tier */}
+                  <div className="stack-tier-column">
+                    <div className="tier-header">
+                      <span className="tier-badge">Tier 1</span>
+                      <h4>Frontend Framework</h4>
+                      <p className="tier-desc">Handles layouts, routing, and user interaction</p>
+                    </div>
+                    <div className="tier-cards-list">
+                      {STACK_CONFIG.frontend.items.map((item) => {
+                        const srv = SERVICES.find(s => s.id === item.id);
+                        if (!srv) return null;
+                        const isSelected = selectedServices.includes(item.id);
+                        return (
+                          <div 
+                            key={item.id} 
+                            onClick={() => handleSelectStackItem('frontend', item.id)}
+                            className={`stack-card-option ${isSelected ? 'selected' : ''}`}
+                          >
+                            <div className="stack-card-main">
+                              <div className="stack-card-tech-info">
+                                <span className="stack-tech-icon">{getTechIcon(item.id)}</span>
+                                <div className="stack-tech-texts">
+                                  <span className="stack-tech-name">{item.name}</span>
+                                  <span className="stack-tech-desc">{item.desc}</span>
+                                </div>
+                              </div>
+                              <span className="stack-tech-price">{formatPrice(srv.basePricePKR, selectedCurrency)}</span>
+                            </div>
+                            {isSelected && <span className="stack-active-indicator">✓ Active</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Backend Tier */}
+                  <div className="stack-tier-column">
+                    <div className="tier-header">
+                      <span className="tier-badge">Tier 2</span>
+                      <h4>Backend API</h4>
+                      <p className="tier-desc">Processes server logic, auth, and database actions</p>
+                    </div>
+                    <div className="tier-cards-list">
+                      {STACK_CONFIG.backend.items.map((item) => {
+                        const srv = SERVICES.find(s => s.id === item.id);
+                        if (!srv) return null;
+                        const isSelected = selectedServices.includes(item.id);
+                        return (
+                          <div 
+                            key={item.id} 
+                            onClick={() => handleSelectStackItem('backend', item.id)}
+                            className={`stack-card-option ${isSelected ? 'selected' : ''}`}
+                          >
+                            <div className="stack-card-main">
+                              <div className="stack-card-tech-info">
+                                <span className="stack-tech-icon">{getTechIcon(item.id)}</span>
+                                <div className="stack-tech-texts">
+                                  <span className="stack-tech-name">{item.name}</span>
+                                  <span className="stack-tech-desc">{item.desc}</span>
+                                </div>
+                              </div>
+                              <span className="stack-tech-price">{formatPrice(srv.basePricePKR, selectedCurrency)}</span>
+                            </div>
+                            {isSelected && <span className="stack-active-indicator">✓ Active</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Database Tier */}
+                  <div className="stack-tier-column">
+                    <div className="tier-header">
+                      <span className="tier-badge">Tier 3</span>
+                      <h4>Database & BaaS</h4>
+                      <p className="tier-desc">Stores user profiles, application data, and media files</p>
+                    </div>
+                    <div className="tier-cards-list">
+                      {STACK_CONFIG.database.items.map((item) => {
+                        const srv = SERVICES.find(s => s.id === item.id);
+                        if (!srv) return null;
+                        const isSelected = selectedServices.includes(item.id);
+                        return (
+                          <div 
+                            key={item.id} 
+                            onClick={() => handleSelectStackItem('database', item.id)}
+                            className={`stack-card-option ${isSelected ? 'selected' : ''}`}
+                          >
+                            <div className="stack-card-main">
+                              <div className="stack-card-tech-info">
+                                <span className="stack-tech-icon">{getTechIcon(item.id)}</span>
+                                <div className="stack-tech-texts">
+                                  <span className="stack-tech-name">{item.name}</span>
+                                  <span className="stack-tech-desc">{item.desc}</span>
+                                </div>
+                              </div>
+                              <span className="stack-tech-price">{formatPrice(srv.basePricePKR, selectedCurrency)}</span>
+                            </div>
+                            {isSelected && <span className="stack-active-indicator">✓ Active</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="stack-builder-note">
+                  <p className="hint">💡 Click any active technology card to deselect it. The pricing counter in the sidebar will update instantly.</p>
                 </div>
               </div>
 
@@ -593,7 +830,7 @@ export default function QuotePage() {
                   <h3>Quote Request Compiled!</h3>
                   <p>
                     We've opened your local email client with the pre-formatted quote details (Reference ID: <span className="bold">{invoiceNumber}</span>). 
-                    If it didn't open automatically, you can copy the summary details and email them to <span className="bold">hello@binacodes.com</span>.
+                    If it didn't open automatically, you can copy the summary details and email them to <span className="bold">binacodex@gmail.com</span>.
                   </p>
                   <div className="success-nav-buttons">
                     <button onClick={handlePrevStep} className="btn-modify-quote">
@@ -637,7 +874,7 @@ export default function QuotePage() {
               projectName: 'Custom Digital Development',
               description: formData.description || 'Custom Scope Build',
               timeline: '1-month',
-              techStack: '',
+              techStack: compiledTechStack,
             }}
             selectedServiceIds={selectedServices}
             currency={selectedCurrency}

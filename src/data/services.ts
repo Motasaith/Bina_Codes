@@ -100,12 +100,36 @@ export const SERVICES: Service[] = [
     basePricePKR: 120000
   },
   {
+    id: 'web-vuejs',
+    name: 'Vue.js / Nuxt Frontend Development',
+    category: 'full-stack',
+    description: 'Bespoke frontend application built using Vue.js and Nuxt.js, featuring lightweight rendering and automatic file-based routing.',
+    whatsIncluded: ['Nuxt Server-side Generation (SSG)', 'Composition API setup', 'Responsive Tailwind/CSS design', 'Pinia State Management integration', 'Vite Speed Configurations', 'Core Web Vitals Audit'],
+    basePricePKR: 110000
+  },
+  {
+    id: 'web-svelte',
+    name: 'Svelte / SvelteKit Frontend Development',
+    category: 'full-stack',
+    description: 'Superfast, compilable web frontend utilizing Svelte and SvelteKit for extremely small build bundles and instant load times.',
+    whatsIncluded: ['SvelteKit App Architecture', 'Reactive State Bindings', 'Component scoped styling', 'Server-less API handlers integration', 'Vite Bundle optimization', 'Smooth transition animations'],
+    basePricePKR: 115000
+  },
+  {
     id: 'web-express',
     name: 'Node.js & Express Backend API',
     category: 'full-stack',
     description: 'Robust, scale-ready backend API service with database integrations, error handling, rate limiting, and structured logging.',
     whatsIncluded: ['Structured Express/TypeScript project', 'JWT Auth & Middleware', 'Database Integration (SQL or NoSQL)', 'Error Handling & Validation', 'Swagger API Documentation', 'Unit & Integration Tests'],
     basePricePKR: 90000
+  },
+  {
+    id: 'web-nestjs',
+    name: 'NestJS Backend API Development',
+    category: 'full-stack',
+    description: 'Enterprise-grade TypeScript backend powered by NestJS framework, using modular architectures, dependency injection, and clean coding standards.',
+    whatsIncluded: ['NestJS Modular Structure', 'TypeORM / Prisma integration', 'Swagger OpenAPI specifications', 'ConfigModule & validation pipes', 'JWT Authentication & Guard setup', 'Comprehensive Unit testing'],
+    basePricePKR: 110000
   },
   {
     id: 'web-fastapi',
@@ -138,6 +162,48 @@ export const SERVICES: Service[] = [
     description: 'Transform your website into a mobile-installable Progressive Web App that works offline, supports push notifications, and loads instantly.',
     whatsIncluded: ['Service Worker Configuration', 'Offline Caching Strategy', 'PWA Install Prompt UI', 'Web App Manifest Setup', 'Push Notifications Integration', 'Lighthouse PWA Validation'],
     basePricePKR: 80000
+  },
+
+  // Databases (under Cloud & DevOps / Full-stack)
+  {
+    id: 'db-postgres',
+    name: 'PostgreSQL Database Setup',
+    category: 'cloud-devops',
+    description: 'Designing and hosting a highly relational PostgreSQL database, incorporating structured schema schemas, indexing, and foreign key relations.',
+    whatsIncluded: ['Table schemas & foreign keys', 'Index structures for fast queries', 'Connection pool setup', 'Safe migration scripts setup', 'Cloud hosting deployment', 'Backup strategy plan'],
+    basePricePKR: 40000
+  },
+  {
+    id: 'db-mongo',
+    name: 'MongoDB Database Setup',
+    category: 'cloud-devops',
+    description: 'Configuring a flexible, document-based NoSQL MongoDB database, ideal for rapidly evolving data structures and scaling horizontal schemas.',
+    whatsIncluded: ['Collection architectures design', 'Index setups for compound queries', 'MongoDB Atlas cloud connect', 'Security IP whitelisting rules', 'Mongoose schema validation code', 'Database migration config'],
+    basePricePKR: 35000
+  },
+  {
+    id: 'db-mysql',
+    name: 'MySQL Database Setup',
+    category: 'cloud-devops',
+    description: 'Deploying a relational MySQL/MariaDB database, optimized for standard transactions, structured tables, and reliable SQL queries.',
+    whatsIncluded: ['SQL table architectures design', 'Database normalization', 'Connection parameters setup', 'Query speed profile reviews', 'Cloud instances backup settings', 'Database schema migration tools'],
+    basePricePKR: 35000
+  },
+  {
+    id: 'db-supabase',
+    name: 'Supabase / Firebase Integration',
+    category: 'cloud-devops',
+    description: 'Configuring serverless databases (Firebase Firestore or Supabase PostgreSQL), incorporating authentication, real-time sync, and object storage.',
+    whatsIncluded: ['Database schema / Table configs', 'Row-Level Security (RLS) policies', 'Email/Social Auth configs', 'Real-time WebSocket integrations', 'Storage bucket asset policies', 'Serverless Edge Functions setup'],
+    basePricePKR: 45000
+  },
+  {
+    id: 'db-redis',
+    name: 'Redis Caching Integration',
+    category: 'cloud-devops',
+    description: 'Setting up an in-memory Redis database to manage session caches, API request rate limits, and key-value queues for high performance.',
+    whatsIncluded: ['Redis server installation', 'Key eviction policies setup', 'API response cache integration', 'Rate limit throttling setups', 'Pub/Sub queue connections', 'Memory capacity monitoring rules'],
+    basePricePKR: 25000
   },
 
   // E-Commerce Solutions
