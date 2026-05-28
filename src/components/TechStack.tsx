@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../styles/TechStack.css';
 
 const techItems = [
@@ -20,8 +21,6 @@ const techItems = [
 export default function TechStack() {
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [dusted, setDusted] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -51,19 +50,21 @@ export default function TechStack() {
         }
       );
 
-      // Exit: dust crumble on scroll out
-      gsap.to(cards, {
-        opacity: 0,
-        scale: 0.6,
-        filter: 'blur(12px) brightness(1.4)',
-        duration: 0.5,
-        stagger: 0.04,
-        ease: 'power2.in',
-        scrollTrigger: {
-          trigger: section,
-          start: 'bottom 20%',
-          end: 'bottom top',
-          scrub: 1,
+      // Scroll-driven dust crumble
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 50%',
+        end: 'bottom top',
+        scrub: 1,
+        onUpdate: (self) => {
+          cards.forEach((card, i) => {
+            const threshold = i * 0.07;
+            if (self.progress > threshold) {
+              card.classList.add('dusted');
+            } else {
+              card.classList.remove('dusted');
+            }
+          });
         },
       });
     }, section);
@@ -71,74 +72,45 @@ export default function TechStack() {
     return () => ctx.revert();
   }, []);
 
-  const handleCardClick = useCallback((index: number) => {
-    setDusted((prev) => {
-      const next = new Set(prev);
-      if (next.has(index)) {
-        next.delete(index);
-      } else {
-        next.add(index);
-      }
-      return next;
-    });
-    // Auto-restore after 2.5s
-    setTimeout(() => {
-      setDusted((prev) => {
-        const next = new Set(prev);
-        next.delete(index);
-        return next;
-      });
-    }, 2500);
-  }, []);
-
   return (
     <section ref={sectionRef} className="techstack-section" id="techstack">
       <div className="techstack-header">
         <span className="techstack-tag">Our Arsenal</span>
         <h2 className="techstack-title">Tech Stack</h2>
-        <p className="techstack-subtitle">Click any icon to watch it crumble to dust</p>
+        <p className="techstack-subtitle">Scroll past to watch them crumble to dust</p>
       </div>
 
       <div ref={gridRef} className="techstack-grid">
-        {techItems.map((item, index) => {
-          const isDusted = dusted.has(index);
-          return (
-            <div
-              key={index}
-              className={`tech-card ${isDusted ? 'dusted' : ''}`}
-              onMouseEnter={() => setActiveIndex(index)}
-              onMouseLeave={() => setActiveIndex(null)}
-              onClick={() => handleCardClick(index)}
-            >
-              {/* Dust particles burst */}
-              <div className="dust-particles">
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className="dust-particle"
-                    style={{
-                      '--dx': `${(Math.random() - 0.5) * 80}px`,
-                      '--dy': `${(Math.random() - 0.5) * 80 - 30}px`,
-                      '--delay': `${Math.random() * 0.15}s`,
-                      '--size': `${2 + Math.random() * 3}px`,
-                    } as React.CSSProperties}
-                  />
-                ))}
-              </div>
-
-              <div className="tech-card-inner">
-                <span className="tech-card-icon" style={{ color: item.color }}>
-                  {item.icon}
-                </span>
-              </div>
-
-              {/* Tooltip */}
-              <div className={`tech-card-tooltip ${activeIndex === index ? 'visible' : ''}`}>
-                <span className="tech-tooltip-name">{item.name}</span>
-              </div>
+        {techItems.map((item, index) => (
+          <div key={index} className="tech-card">
+            {/* Dust particles burst */}
+            <div className="dust-particles">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <span
+                  key={i}
+                  className="dust-particle"
+                  style={{
+                    '--dx': `${(Math.random() - 0.5) * 80}px`,
+                    '--dy': `${(Math.random() - 0.5) * 80 - 30}px`,
+                    '--delay': `${Math.random() * 0.15}s`,
+                    '--size': `${2 + Math.random() * 3}px`,
+                  } as React.CSSProperties}
+                />
+              ))}
             </div>
-          );
-        })}
+
+            <div className="tech-card-inner">
+              <span className="tech-card-icon" style={{ color: item.color }}>
+                {item.icon}
+              </span>
+            </div>
+
+            {/* Tooltip */}
+            <div className="tech-card-tooltip">
+              <span className="tech-tooltip-name">{item.name}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
