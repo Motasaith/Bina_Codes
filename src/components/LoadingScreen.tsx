@@ -27,11 +27,11 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [statusText, setStatusText] = useState('Preparing your experience...');
   const startTimeRef = useRef<number>(Date.now());
   const videosReadyRef = useRef<boolean[]>(new Array(CRITICAL_VIDEOS.length).fill(false));
-  const allReadyRef = useRef(false);
+  const hasExitedRef = useRef(false);
+  const progressValueRef = useRef(0);
 
   // Track video loading progress
   useEffect(() => {
-    const videoEls: HTMLVideoElement[] = [];
     const cleanupFns: (() => void)[] = [];
 
     CRITICAL_VIDEOS.forEach((src, index) => {
@@ -46,7 +46,6 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       video.style.width = '1px';
       video.style.height = '1px';
       document.body.appendChild(video);
-      videoEls.push(video);
 
       const onCanPlay = () => {
         videosReadyRef.current[index] = true;
@@ -54,14 +53,11 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       };
 
       const onError = () => {
-        // Mark as ready even on error so we don't block forever
         videosReadyRef.current[index] = true;
       };
 
       video.addEventListener('canplaythrough', onCanPlay, { once: true });
       video.addEventListener('error', onError, { once: true });
-
-      // Force load
       video.load();
 
       cleanupFns.push(() => {
@@ -79,37 +75,72 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     };
   }, []);
 
-  // Simulate loading progress with slower, smoother increments
+  // Simulate loading progress and trigger exit when complete
   useEffect(() => {
     const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        // Slower increments: 2-8% per tick instead of 5-20%
-        const increment = Math.random() * 6 + 2;
-        const next = prev + increment;
+      progressValueRef.current += Math.random() * 6 + 2;
+      const next = Math.min(progressValueRef.current, 100);
+      setProgress(next);
 
-        // Update status text based on progress
-        if (next < 30) setStatusText('Loading assets...');
-        else if (next < 60) setStatusText('Buffering videos...');
-        else if (next < 85) setStatusText('Optimizing for your connection...');
-        else if (next < 98) setStatusText('Finalizing...');
+      if (next < 30) setStatusText('Loading assets...');
+      else if (next < 60) setStatusText('Buffering videos...');
+      else if (next < 85) setStatusText('Optimizing for your connection...');
+      else if (next < 98) setStatusText('Finalizing...');
 
-        return next;
-      });
+      if (next >= 100 && !hasExitedRef.current) {
+        clearInterval(progressInterval);
+        hasExitedRef.current = true;
+        setStatusText('Welcome to Bina Codes');
+
+        const elapsed = Date.now() - startTimeRef.current;
+        const remaining = Math.max(0, MIN_LOADING_TIME_MS - elapsed);
+
+        const tl = gsap.timeline({
+          delay: 0.4 + remaining / 1000,
+          onComplete: () => {
+            onComplete();
+          },
+        });
+
+        tl.to(logoRef.current, {
+          opacity: 0,
+          scale: 1.1,
+          duration: 0.5,
+          ease: 'power2.in',
+        });
+
+        tl.to(
+          [sandLayer3Ref.current, sandLayer2Ref.current, sandLayer1Ref.current],
+          {
+            opacity: 0,
+            x: 100,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: 'power2.in',
+          },
+          '-=0.3'
+        );
+
+        tl.to(
+          containerRef.current,
+          {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power2.in',
+          },
+          '-=0.3'
+        );
+      }
     }, PROGRESS_TICK_MS);
 
     return () => clearInterval(progressInterval);
-  }, []);
+  }, [onComplete]);
 
   // Entrance animation
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Generate random sand particles
     const generateParticles = (layer: HTMLDivElement, count: number, sizeRange: [number, number], speedRange: [number, number]) => {
       for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
@@ -130,7 +161,6 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     if (sandLayer2Ref.current) generateParticles(sandLayer2Ref.current, 30, [4, 10], [5, 9]);
     if (sandLayer3Ref.current) generateParticles(sandLayer3Ref.current, 20, [8, 16], [7, 12]);
 
-    // Generate dust clouds
     if (dustRef.current) {
       for (let i = 0; i < 8; i++) {
         const cloud = document.createElement('div');
@@ -143,7 +173,6 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       }
     }
 
-    // Entrance animation
     const tl = gsap.timeline();
 
     tl.fromTo(
@@ -171,66 +200,33 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     };
   }, []);
 
-  // Exit animation when loading completes
-  useEffect(() => {
-    if (progress >= 100 && !allReadyRef.current) {
-      const elapsed = Date.now() - startTimeRef.current;
-      const remaining = Math.max(0, MIN_LOADING_TIME_MS - elapsed);
-
-      allReadyRef.current = true;
-      setStatusText('Welcome to Bina Codes');
-
-      const tl = gsap.timeline({
-        delay: 0.4 + remaining / 1000, // Brief pause at 100% + enforce min time
-        onComplete: () => {
-          onComplete();
-        },
-      });
-
-      tl.to(logoRef.current, {
-        opacity: 0,
-        scale: 1.1,
-        duration: 0.5,
-        ease: 'power2.in',
-      });
-
-      tl.to(
-        [sandLayer3Ref.current, sandLayer2Ref.current, sandLayer1Ref.current],
-        {
-          opacity: 0,
-          x: 100,
-          duration: 0.7,
-          stagger: 0.12,
-          ease: 'power2.in',
-        },
-        '-=0.3'
-      );
-
-      tl.to(
-        containerRef.current,
-        {
-          opacity: 0,
-          duration: 0.5,
-          ease: 'power2.in',
-        },
-        '-=0.3'
-      );
-
-      return () => {
-        tl.kill();
-      };
-    }
-  }, [progress, onComplete]);
-
   // Fallback: force completion after max time even if videos stall
   useEffect(() => {
     const maxWait = setTimeout(() => {
-      videosReadyRef.current.fill(true);
-      setProgress((prev) => (prev < 100 ? 100 : prev));
-    }, 15000); // 15 second absolute max
+      if (!hasExitedRef.current) {
+        hasExitedRef.current = true;
+        setProgress(100);
+        setStatusText('Welcome to Bina Codes');
+
+        const tl = gsap.timeline({
+          delay: 0.3,
+          onComplete: () => {
+            onComplete();
+          },
+        });
+
+        tl.to(logoRef.current, { opacity: 0, scale: 1.1, duration: 0.5, ease: 'power2.in' });
+        tl.to(
+          [sandLayer3Ref.current, sandLayer2Ref.current, sandLayer1Ref.current],
+          { opacity: 0, x: 100, duration: 0.7, stagger: 0.12, ease: 'power2.in' },
+          '-=0.3'
+        );
+        tl.to(containerRef.current, { opacity: 0, duration: 0.5, ease: 'power2.in' }, '-=0.3');
+      }
+    }, 15000);
 
     return () => clearTimeout(maxWait);
-  }, []);
+  }, [onComplete]);
 
   const clampedProgress = Math.min(progress, 100);
 
