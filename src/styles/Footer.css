@@ -276,6 +276,40 @@
   color: var(--color-text-muted-dark);
 }
 
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.footer-legal-link {
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  color: var(--color-text-muted-dark);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.footer-legal-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent-gold);
+  transition: width 0.3s ease;
+}
+
+.footer-legal-link:hover {
+  color: var(--color-brand-primary);
+}
+
+.footer-legal-link:hover::after {
+  width: 100%;
+}
+
 /* ---- BACK TO TOP ---- */
 .footer-back-to-top {
   width: 48px;

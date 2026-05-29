@@ -21,6 +21,9 @@ import QuotePage from './pages/QuotePage';
 import AboutPage from './pages/AboutPage';
 import CareersPage from './pages/CareersPage';
 import BlogPage from './pages/BlogPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
+import CookiePolicyPage from './pages/CookiePolicyPage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -138,6 +141,9 @@ export default function App() {
         <Route path="/quote" element={<QuotePage />} />
         <Route path="/careers" element={<CareersPage />} />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+        <Route path="/cookie-policy" element={<CookiePolicyPage />} />
       </Routes>
 
       <div className="no-print">

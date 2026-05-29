@@ -267,7 +267,7 @@ export default function BlogPage() {
               <button type="submit" className="blog-newsletter-btn">Subscribe</button>
             </form>
             <p className="blog-newsletter-note">
-              No spam. Unsubscribe anytime. Read our <Link to="/">privacy policy</Link>.
+              No spam. Unsubscribe anytime. Read our <Link to="/privacy-policy">privacy policy</Link>.
             </p>
           </div>
         </div>

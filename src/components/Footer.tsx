@@ -208,6 +208,12 @@ export default function Footer() {
             © {currentYear} Bina Codes. All rights reserved.
           </span>
 
+          <div className="footer-legal-links">
+            <Link to="/privacy-policy" className="footer-legal-link">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="footer-legal-link">Terms of Service</Link>
+            <Link to="/cookie-policy" className="footer-legal-link">Cookie Policy</Link>
+          </div>
+
           <button onClick={scrollToTop} className="footer-back-to-top" aria-label="Back to top">
             <span className="back-to-top-arrow"></span>
             <span className="back-to-top-ripple"></span>
