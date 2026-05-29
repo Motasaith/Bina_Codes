@@ -138,8 +138,8 @@ export default function Footer() {
             <ul className="footer-links">
               <li><Link to="/about" className="footer-link">About & Team</Link></li>
               <li><Link to="/services" className="footer-link">Services</Link></li>
-              <li><Link to="/#contact" className="footer-link">Careers</Link></li>
-              <li><a href="#" className="footer-link">Blog</a></li>
+              <li><Link to="/careers" className="footer-link">Careers</Link></li>
+              <li><Link to="/blog" className="footer-link">Blog</Link></li>
             </ul>
           </div>
 

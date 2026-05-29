@@ -70,6 +70,8 @@ export default function Navbar() {
         <a href="#home" onClick={(e) => handleNavClick('home', e)} className="nav-link">Home</a>
         <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}>About</Link>
         <Link to="/services" className={`nav-link ${location.pathname === '/services' ? 'active' : ''}`}>Services</Link>
+        <Link to="/careers" className={`nav-link ${location.pathname === '/careers' ? 'active' : ''}`}>Careers</Link>
+        <Link to="/blog" className={`nav-link ${location.pathname === '/blog' ? 'active' : ''}`}>Blog</Link>
         <a href="#contact" onClick={(e) => handleNavClick('contact', e)} className="nav-link">Contact</a>
       </nav>
 
@@ -95,6 +97,8 @@ export default function Navbar() {
           <a href="#home" className="nav-link-mobile" onClick={(e) => handleNavClick('home', e)}>Home</a>
           <Link to="/about" className={`nav-link-mobile ${location.pathname === '/about' ? 'active' : ''}`} onClick={handleLinkClick}>About</Link>
           <Link to="/services" className="nav-link-mobile" onClick={handleLinkClick}>Services</Link>
+          <Link to="/careers" className={`nav-link-mobile ${location.pathname === '/careers' ? 'active' : ''}`} onClick={handleLinkClick}>Careers</Link>
+          <Link to="/blog" className={`nav-link-mobile ${location.pathname === '/blog' ? 'active' : ''}`} onClick={handleLinkClick}>Blog</Link>
           <a href="#contact" className="nav-link-mobile" onClick={(e) => handleNavClick('contact', e)}>Contact</a>
         </nav>
         

@@ -19,6 +19,8 @@ import LoadingScreen from './components/LoadingScreen';
 import ServicesPage from './pages/ServicesPage';
 import QuotePage from './pages/QuotePage';
 import AboutPage from './pages/AboutPage';
+import CareersPage from './pages/CareersPage';
+import BlogPage from './pages/BlogPage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -134,6 +136,8 @@ export default function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/quote" element={<QuotePage />} />
+        <Route path="/careers" element={<CareersPage />} />
+        <Route path="/blog" element={<BlogPage />} />
       </Routes>
 
       <div className="no-print">
