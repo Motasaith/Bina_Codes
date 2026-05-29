@@ -41,6 +41,9 @@ export default function Hero() {
             playsInline
             disablePictureInPicture
             controls={false}
+            preload="auto"
+            poster="/3d_model_bg.png"
+            style={{ willChange: 'transform' }}
           />
         </div>
 

@@ -221,6 +221,16 @@
   letter-spacing: 2px;
 }
 
+.loading-status {
+  font-family: var(--font-primary);
+  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+  color: rgba(245, 237, 228, 0.45);
+  letter-spacing: 1px;
+  min-height: 1.4em;
+  margin-top: -0.5rem;
+  transition: color 0.3s ease;
+}
+
 /* Mobile adjustments */
 @media (max-width: 576px) {
   .loading-logo-icon {

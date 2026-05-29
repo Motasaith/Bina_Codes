@@ -96,6 +96,9 @@ export default function Footer() {
           playsInline
           disablePictureInPicture
           controls={false}
+          preload="auto"
+          poster="/section_bg.png"
+          style={{ willChange: 'transform' }}
         />
       </div>
       <div className="footer-video-overlay" />
