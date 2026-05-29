@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import '../styles/LoadingScreen.css';
 
@@ -28,12 +28,6 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const startTimeRef = useRef<number>(Date.now());
   const videosReadyRef = useRef<boolean[]>(new Array(CRITICAL_VIDEOS.length).fill(false));
   const allReadyRef = useRef(false);
-
-  const checkAllReady = useCallback(() => {
-    const allVideosReady = videosReadyRef.current.every(Boolean);
-    const minTimeElapsed = Date.now() - startTimeRef.current >= MIN_LOADING_TIME_MS;
-    return allVideosReady && minTimeElapsed;
-  }, []);
 
   // Track video loading progress
   useEffect(() => {
@@ -180,11 +174,14 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   // Exit animation when loading completes
   useEffect(() => {
     if (progress >= 100 && !allReadyRef.current) {
+      const elapsed = Date.now() - startTimeRef.current;
+      const remaining = Math.max(0, MIN_LOADING_TIME_MS - elapsed);
+
       allReadyRef.current = true;
       setStatusText('Welcome to Bina Codes');
 
       const tl = gsap.timeline({
-        delay: 0.4, // Brief pause at 100% so user sees completion
+        delay: 0.4 + remaining / 1000, // Brief pause at 100% + enforce min time
         onComplete: () => {
           onComplete();
         },
